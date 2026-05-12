@@ -97,6 +97,8 @@ advanced usage ([03_advanced_usage.py](docs/tutorials/03_advanced_usage.py)).
 
 ## Documentation
 
+Full docs are hosted on [GitHub Pages](https://maftylab.github.io/Ageas/html/index.html)
+
 - Installation: [docs/installation.rst](docs/installation.rst)
 - Tutorials: [docs/tutorials/](docs/tutorials/)
 - API reference: [docs/api.rst](docs/api.rst)
