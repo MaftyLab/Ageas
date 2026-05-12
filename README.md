@@ -7,6 +7,7 @@ Ageas is a computational framework for inferring cell fate bias from static sing
 <p align="center">
   <img src="docs/workflow.png" alt="Ageas workflow" width="60%">
 </p>
+
 ## Key Features
 
 - **Time-agnostic fate inference**  
