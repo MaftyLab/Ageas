@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ageas.Unit &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ageas.n_kfold_selection" href="ageas.n_kfold_selection.html" />
+    <link rel="prev" title="ageas.Deck" href="ageas.Deck.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#core-objects">Core Objects</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ageas.Hangar.html">ageas.Hangar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.Deck.html">ageas.Deck</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ageas.Unit</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ageas.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#operations">Operations</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">ageas.Unit</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/ageas.Unit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ageas-unit">
+<h1>ageas.Unit<a class="headerlink" href="#ageas-unit" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ageas.Unit">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ageas.</span></span><span class="sig-name descname"><span class="pre">Unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ageas.Unit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Single classifier model bundled with its configuration and runtime state.</p>
+<p>The unit stores everything needed to reproduce, train, and inspect one
+model: the classifier type, the configuration dictionary, the chosen
+accelerator, the trained model weights, the trainer object, and the
+accumulated reports from each Ageas operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tail</strong> – Short name used to disambiguate units sharing the same type.</p></li>
+<li><p><strong>type</strong> – Model type key (one of <code class="xref py py-data docutils literal notranslate"><span class="pre">SUPPORTED_TYPES</span></code>).</p></li>
+<li><p><strong>config</strong> – Hyper-parameter dictionary for the classifier and trainer.</p></li>
+<li><p><strong>accelerator</strong> – Current accelerator string (<code class="docutils literal notranslate"><span class="pre">'cpu'</span></code> or <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>).</p></li>
+<li><p><strong>device</strong> – GPU device count / index resolved at spike time.</p></li>
+<li><p><strong>model</strong> – Trained classifier instance (<code class="docutils literal notranslate"><span class="pre">None</span></code> until after a sortie).</p></li>
+<li><p><strong>trainer</strong> – Trainer object (<code class="docutils literal notranslate"><span class="pre">None</span></code> until after a sortie).</p></li>
+<li><p><strong>report</strong> – Per-operation metric records accumulated during selection.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Unit.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ageas.Unit.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize a Unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tail</strong> – Short tail name used to disambiguate units that share the
+same model type (e.g. <code class="docutils literal notranslate"><span class="pre">'unit1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'unit2'</span></code>).</p></li>
+<li><p><strong>unit_type</strong> – Model type key. Must be one of <code class="xref py py-data docutils literal notranslate"><span class="pre">SUPPORTED_TYPES</span></code>.</p></li>
+<li><p><strong>config</strong> – Hyper-parameter dictionary forwarded to the underlying
+classifier and trainer.</p></li>
+<li><p><strong>accelerator</strong> – Initial accelerator hint, <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code> or <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>.
+Re-evaluated at sortie time by <a class="reference internal" href="#ageas.Unit.spike" title="ageas.Unit.spike"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spike()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ageas.Unit.clf_object">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clf_object</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">type</span></span><a class="headerlink" href="#ageas.Unit.clf_object" title="Link to this definition"></a></dt>
+<dd><p>Classifier class associated with this unit’s type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class (not an instance) registered under <code class="docutils literal notranslate"><span class="pre">self.type</span></code>
+in <code class="xref py py-data docutils literal notranslate"><span class="pre">SUPPORTED_TYPES</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ageas.Unit.id">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#ageas.Unit.id" title="Link to this definition"></a></dt>
+<dd><p>Public unit ID combining the model type and tail.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">&quot;{type}_{tail}&quot;</span></code> formatted identifier.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Unit.spike">
+<span class="sig-name descname"><span class="pre">spike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available_devices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ageas.Unit.spike" title="Link to this definition"></a></dt>
+<dd><p>Verify that the unit is ready to launch and resolve its accelerator.</p>
+<p>Performs three checks in order:</p>
+<ol class="arabic simple">
+<li><p>The model type is supported by Ageas.</p></li>
+<li><p>CPU-only models are pinned to the CPU accelerator.</p></li>
+<li><p>CUDA models receive a valid device list, or fall back to CPU
+with a warning.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>accelerator</strong> – Requested accelerator (<code class="docutils literal notranslate"><span class="pre">'cpu'</span></code> or <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>).</p></li>
+<li><p><strong>available_devices</strong> – Optional list of GPU device indices that the
+deck has reserved for this unit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The classifier class to instantiate, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the unit
+cannot be launched (unsupported type, unknown accelerator).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ageas.Deck.html" class="btn btn-neutral float-left" title="ageas.Deck" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ageas.n_kfold_selection.html" class="btn btn-neutral float-right" title="ageas.n_kfold_selection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

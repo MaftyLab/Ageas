@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ageas.Deck &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ageas.Unit" href="ageas.Unit.html" />
+    <link rel="prev" title="ageas.Hangar" href="ageas.Hangar.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#core-objects">Core Objects</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ageas.Hangar.html">ageas.Hangar</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ageas.Deck</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ageas.Deck"><code class="docutils literal notranslate"><span class="pre">Deck</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.Unit.html">ageas.Unit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#operations">Operations</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">ageas.Deck</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/ageas.Deck.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ageas-deck">
+<h1>ageas.Deck<a class="headerlink" href="#ageas-deck" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ageas.Deck">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ageas.</span></span><span class="sig-name descname"><span class="pre">Deck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">squad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dataloader_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cuda_devices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ageas.Deck" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ageas.Hangar.html#ageas.Hangar" title="ageas.hangar.Hangar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hangar</span></code></a></p>
+<p>Sortie deck that trains, evaluates, and explains a squad of units.</p>
+<p>Inherits from <a class="reference internal" href="ageas.Hangar.html#ageas.Hangar" title="ageas.Hangar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hangar</span></code></a> and adds operational logic on top
+of the candidate squad: a <code class="xref py py-class docutils literal notranslate"><span class="pre">Trainer_Maker</span></code> to launch
+the correct trainer per model type, a per-unit report ledger, and the
+<a class="reference internal" href="#ageas.Deck.debrief" title="ageas.Deck.debrief"><code class="xref py py-meth docutils literal notranslate"><span class="pre">debrief()</span></code></a> aggregation that combines model-wise explanations
+weighted by their validation/test metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>squad</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">Unit</span></code> for the active operating units.</p></li>
+<li><p><strong>trainer_maker</strong> – Factory that produces trainer-model pairs.</p></li>
+<li><p><strong>n_dataloader_workers</strong> – Worker count for prediction/test dataloaders.</p></li>
+<li><p><strong>report</strong> – Per-unit <code class="docutils literal notranslate"><span class="pre">{'vali':</span> <span class="pre">[],</span> <span class="pre">'test':</span> <span class="pre">[]}</span></code> metric ledger.</p></li>
+<li><p><strong>accelerator</strong> – Default accelerator (<code class="docutils literal notranslate"><span class="pre">'cpu'</span></code> or <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>).</p></li>
+<li><p><strong>cuda_devices</strong> – Resolved GPU device indices (<code class="docutils literal notranslate"><span class="pre">None</span></code> for CPU).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">squad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dataloader_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accelerator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cuda_devices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ageas.Deck.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize a Deck.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>squad</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">Unit</span></code> to operate on, typically
+produced by <a class="reference internal" href="ageas.Hangar.html#ageas.Hangar.sortie_generate" title="ageas.Hangar.sortie_generate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sortie_generate()</span></code></a>.</p></li>
+<li><p><strong>n_dataloader_workers</strong> – Number of worker processes for the
+prediction/test dataloaders.</p></li>
+<li><p><strong>accelerator</strong> – Default accelerator (<code class="docutils literal notranslate"><span class="pre">'cpu'</span></code> or <code class="docutils literal notranslate"><span class="pre">'cuda'</span></code>) the
+deck will request from each unit at sortie time.</p></li>
+<li><p><strong>cuda_devices</strong> – Optional list of GPU device indices to bind. When
+<code class="docutils literal notranslate"><span class="pre">accelerator='cuda'</span></code> and this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, all visible devices
+are used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.debrief">
+<span class="sig-name descname"><span class="pre">debrief</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.utils.data.Dataset</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'trail'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'final'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vali.CEL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ageas.Deck.debrief" title="Link to this definition"></a></dt>
+<dd><p>Aggregate per-class explanation scores across the squad.</p>
+<p>Each unit’s <code class="docutils literal notranslate"><span class="pre">explain</span></code> method is called on <code class="docutils literal notranslate"><span class="pre">exp_dataset</span></code> and the
+resulting per-class score table is weighted by that unit’s metric
+value (<code class="docutils literal notranslate"><span class="pre">monitor_metric</span></code>). The weight direction depends on
+<code class="docutils literal notranslate"><span class="pre">monitor_type</span></code>: lower-is-better metrics divide by the score,
+higher-is-better metrics multiply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exp_dataset</strong> – Dataset to explain. Forwarded unchanged to every
+unit’s <code class="docutils literal notranslate"><span class="pre">explain</span></code> method.</p></li>
+<li><p><strong>operation</strong> – Operation name used to look up the metric in
+<code class="docutils literal notranslate"><span class="pre">unit.report</span></code>.</p></li>
+<li><p><strong>mission</strong> – Mission name (e.g. <code class="docutils literal notranslate"><span class="pre">'final'</span></code> or <code class="docutils literal notranslate"><span class="pre">'fold_1'</span></code>) used
+inside the operation’s report.</p></li>
+<li><p><strong>monitor_type</strong> – <code class="docutils literal notranslate"><span class="pre">'min'</span></code> for lower-is-better metrics
+(divide-by-weight), <code class="docutils literal notranslate"><span class="pre">'max'</span></code> for higher-is-better metrics
+(multiply-by-weight).</p></li>
+<li><p><strong>monitor_metric</strong> – Dotted metric name (e.g. <code class="docutils literal notranslate"><span class="pre">'vali.CEL'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'test.accuracy'</span></code>).</p></li>
+<li><p><strong>verbose</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, print per-unit weights and the assembled
+answer.</p></li>
+<li><p><strong>kwargs</strong> – Additional keyword arguments forwarded to each
+<code class="docutils literal notranslate"><span class="pre">unit.model.explain</span></code> call.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The integrated per-class score table. Columns ending in
+<code class="docutils literal notranslate"><span class="pre">_Std</span></code> are dropped from the final answer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.make_report">
+<span class="sig-name descname"><span class="pre">make_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">squad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#ageas.Deck.make_report" title="Link to this definition"></a></dt>
+<dd><p>Initialize an empty report ledger for a squad of units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>squad</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">Unit</span></code> for which to allocate report
+slots. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses the deck’s current squad.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A nested dict <code class="docutils literal notranslate"><span class="pre">{unit_id:</span> <span class="pre">{'vali':</span> <span class="pre">[],</span> <span class="pre">'test':</span> <span class="pre">[]}}</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ageas.Deck.ops_reports">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ops_reports</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#ageas.Deck.ops_reports" title="Link to this definition"></a></dt>
+<dd><p>Aggregate per-operation reports across the entire squad.</p>
+<p>Walks the per-unit <code class="docutils literal notranslate"><span class="pre">unit.report</span></code> ledger and reshapes it into a
+nested structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">operation</span><span class="p">:</span> <span class="p">{</span><span class="n">mission</span><span class="p">:</span> <span class="p">{</span><span class="n">metric_type</span><span class="p">:</span> <span class="p">{</span><span class="n">metric_name</span><span class="p">:</span> <span class="p">{</span><span class="n">unit_id</span><span class="p">:</span> <span class="p">[</span><span class="n">values</span><span class="p">]}}}}}</span>
+</pre></div>
+</div>
+<p>that is convenient for downstream summary plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The merged report tree described above.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.utils.data.Dataset</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#ageas.Deck.predict" title="Link to this definition"></a></dt>
+<dd><p>Ensemble-predict by averaging probabilities across the squad.</p>
+<p>Each unit produces softmax outputs on <code class="docutils literal notranslate"><span class="pre">query_dataset</span></code> which are
+averaged uniformly across all units in the squad.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_dataset</strong> – Dataset to score. Each item must yield
+<code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> tuples.</p></li>
+<li><p><strong>batch_size</strong> – Batch size for the prediction dataloader.</p></li>
+<li><p><strong>num_workers</strong> – Number of dataloader workers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple <code class="docutils literal notranslate"><span class="pre">(all_preds,</span> <span class="pre">all_labels)</span></code> where <code class="docutils literal notranslate"><span class="pre">all_preds</span></code> is the
+averaged probability matrix and <code class="docutils literal notranslate"><span class="pre">all_labels</span></code> is the concatenated
+label tensor in the same order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.sortie">
+<span class="sig-name descname"><span class="pre">sortie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.utils.data.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vali_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.utils.data.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fea_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.utils.data.Dataset</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_trainer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#ageas.Deck.sortie" title="Link to this definition"></a></dt>
+<dd><p>Train every unit in the squad on a single fold and collect metrics.</p>
+<p>Each unit is “spiked” to verify its accelerator, then trained via
+the appropriate trainer (Lightning, scikit-learn, or XGBoost).
+Validation metrics are read from the trainer’s callback metrics and
+an optional test pass is launched on <code class="docutils literal notranslate"><span class="pre">test_dataset</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_data</strong> – Training split for this sortie.</p></li>
+<li><p><strong>vali_data</strong> – Validation split for this sortie.</p></li>
+<li><p><strong>n_classes</strong> – Number of label classes in the task.</p></li>
+<li><p><strong>fea_names</strong> – Feature names (typically gene symbols/Ensembl IDs).</p></li>
+<li><p><strong>test_dataset</strong> – Optional held-out test split. If provided, each
+model is also evaluated on it after training.</p></li>
+<li><p><strong>report</strong> – Existing report dict to append to. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses the
+deck’s own <code class="docutils literal notranslate"><span class="pre">self.report</span></code> ledger.</p></li>
+<li><p><strong>save_model</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, retain the trained model on the unit.</p></li>
+<li><p><strong>save_trainer</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, retain the trainer object on the unit.</p></li>
+<li><p><strong>verbose</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, print per-unit training and evaluation
+traces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated report mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span></code> to lists of
+validation and test metric snapshots.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.Deck.squad_update">
+<span class="sig-name descname"><span class="pre">squad_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ageas.Deck.squad_update" title="Link to this definition"></a></dt>
+<dd><p>Restrict the squad and report ledger to a subset of unit IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unit_ids</strong> – Whitelist of unit IDs to keep. All other units are
+dropped from both <code class="docutils literal notranslate"><span class="pre">self.squad</span></code> and <code class="docutils literal notranslate"><span class="pre">self.report</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ageas.Hangar.html" class="btn btn-neutral float-left" title="ageas.Hangar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ageas.Unit.html" class="btn btn-neutral float-right" title="ageas.Unit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
