@@ -1,9 +1,8 @@
 Welcome to Ageas's documentation!
 =================================
 
-**Ageas** (AutoML-based Genetic regulatory Element extrAction System) is a
-multi-model framework for identifying class-specific regulatory factors from
-single-cell omics data.
+**Ageas** (AutoML-based Genetic regulatory Element extrAction System) is a computational framework
+for inferring cell fate bias from static single-cell and spatial multi-omics data.
 
 Ageas trains a heterogeneous panel of classifiers — neural networks
 (MLP/RNN, ResNet-mixer) alongside classical models (XGBoost, Logistic
