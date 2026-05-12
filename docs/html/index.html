@@ -1,0 +1,181 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Ageas’s documentation! &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to Ageas’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-ageas-s-documentation">
+<h1>Welcome to Ageas’s documentation!<a class="headerlink" href="#welcome-to-ageas-s-documentation" title="Link to this heading"></a></h1>
+<p><strong>Ageas</strong> (AutoML-based Genetic regulatory Element extrAction System) is a
+multi-model framework for identifying class-specific regulatory factors from
+single-cell omics data.</p>
+<p>Ageas trains a heterogeneous panel of classifiers — neural networks
+(MLP/RNN, ResNet-mixer) alongside classical models (XGBoost, Logistic
+Regression, SVM, Naive Bayes) — over an <a class="reference internal" href="generated/ageas.Hangar.html#ageas.Hangar" title="ageas.Hangar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hangar</span></code></a> of candidate
+units. A <a class="reference internal" href="generated/ageas.Deck.html#ageas.Deck" title="ageas.Deck"><code class="xref py py-class docutils literal notranslate"><span class="pre">Deck</span></code></a> orchestrates the sortie pipeline of
+n-iteration k-fold cross-validation, retains the strongest units, and
+aggregates per-class explanations (Integrated Gradients, SHAP, or model
+coefficients) into a unified factor importance table.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This project is under active development.</p>
+</div>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Heterogeneous Model Panel:</strong> Mixes deep learning classifiers
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">NN_Classifier</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Mixer_Classifier</span></code>) with
+classical estimators (<code class="xref py py-class docutils literal notranslate"><span class="pre">XGB_Classifier</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">LogReg_Classifier</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SVM_Classifier</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MNB_Classifier</span></code>) under a single Lightning-style API.</p></li>
+<li><p><strong>N-Iteration K-Fold Selection:</strong> <a class="reference internal" href="generated/ageas.n_kfold_selection.html#ageas.n_kfold_selection" title="ageas.n_kfold_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">n_kfold_selection()</span></code></a> runs
+successive cross-validation rounds and prunes the squad to the units
+that survive the configured retention/cutoff thresholds.</p></li>
+<li><p><strong>Iterative Factor Extraction:</strong> <a class="reference internal" href="generated/ageas.n_iter_extraction.html#ageas.n_iter_extraction" title="ageas.n_iter_extraction"><code class="xref py py-func docutils literal notranslate"><span class="pre">n_iter_extraction()</span></code></a> and
+<a class="reference internal" href="generated/ageas.n_iter_boost_selection.html#ageas.n_iter_boost_selection" title="ageas.n_iter_boost_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">n_iter_boost_selection()</span></code></a> chain selection and
+explanation passes to converge on the most informative regulatory
+factors per cell class.</p></li>
+<li><p><strong>Unified Explanation Pipeline:</strong> <a class="reference internal" href="generated/ageas.Deck.html#ageas.Deck.debrief" title="ageas.Deck.debrief"><code class="xref py py-meth docutils literal notranslate"><span class="pre">debrief()</span></code></a> weights
+per-unit explanations by their validation/test metrics and produces a
+single integrated importance table across the squad.</p></li>
+</ul>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<p>If you use Ageas in your research, please cite:</p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@software</span><span class="p">{</span><span class="nl">ageas</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Ageas enables time-agnostic cell fate inference from single-cell and spatial multi-omics data}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Junyao Jiang, Alex Kong, Jack Yu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://github.com/MaftyLab/Ageas}</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verifying-the-installation">Verifying the Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/01_quickstart.html">Tutorial 01 — Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/02_data_preparation.html">Tutorial 02 — Data preparation and corpus construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/03_advanced_usage.html">Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#core-objects">Core Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#operations">Operations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

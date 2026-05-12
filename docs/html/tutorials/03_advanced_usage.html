@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api.html" />
+    <link rel="prev" title="Tutorial 02 — Data preparation and corpus construction" href="02_data_preparation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_quickstart.html">Tutorial 01 — Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_data_preparation.html">Tutorial 02 — Data preparation and corpus construction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Shared-setup">Shared setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#1.-Custom-model-configs">1. Custom model configs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#2.-n_iter_boost_selection">2. <code class="docutils literal notranslate"><span class="pre">n_iter_boost_selection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#3.-n_iter_extraction">3. <code class="docutils literal notranslate"><span class="pre">n_iter_extraction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#4.-Inspecting-per-unit-reports">4. Inspecting per-unit reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#5.-Saving-and-reloading-trained-models">5. Saving and reloading trained models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Tutorials and Examples</a></li>
+      <li class="breadcrumb-item active">Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/03_advanced_usage.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Tutorial-03-—-Advanced-usage:-boost-selection,-extraction,-and-custom-configs">
+<h1>Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs<a class="headerlink" href="#Tutorial-03-—-Advanced-usage:-boost-selection,-extraction,-and-custom-configs" title="Link to this heading"></a></h1>
+<p>This tutorial covers the two iterative pipelines and shows how to author model configs from scratch.</p>
+<p><strong>Topics:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_iter_boost_selection</span></code>: iteratively narrow the feature set before final model selection (useful when starting with thousands of genes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_iter_extraction</span></code>: identify top per-class regulatory factors across multiple rounds of selection + explanation</p></li>
+<li><p>Writing custom JSON config files for any supported model family</p></li>
+<li><p>Inspecting per-unit reports stored inside a <code class="docutils literal notranslate"><span class="pre">Deck</span></code></p></li>
+<li><p>Saving and reloading trained models</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ageas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Hangar</span><span class="p">,</span> <span class="n">n_iter_boost_selection</span><span class="p">,</span> <span class="n">n_iter_extraction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ageas.tool</span><span class="w"> </span><span class="kn">import</span> <span class="n">Multimodal_Corpus</span><span class="p">,</span> <span class="n">make_fake_adata</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Shared-setup">
+<h2>Shared setup<a class="headerlink" href="#Shared-setup" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">make_fake_adata</span><span class="p">(</span><span class="n">n_class</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_clusters_per_class</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">adata_path</span> <span class="o">=</span> <span class="s2">&quot;ageas_tut03.h5ad&quot;</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">write_h5ad</span><span class="p">(</span><span class="n">adata_path</span><span class="p">)</span>
+
+<span class="n">corpus</span> <span class="o">=</span> <span class="n">Multimodal_Corpus</span><span class="p">(</span><span class="n">adata_path</span><span class="p">,</span> <span class="n">label_key</span><span class="o">=</span><span class="s2">&quot;celltype&quot;</span><span class="p">,</span> <span class="n">backed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corpus: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span><span class="si">}</span><span class="s2"> cells, </span><span class="si">{</span><span class="n">corpus</span><span class="o">.</span><span class="n">adata</span><span class="o">.</span><span class="n">n_vars</span><span class="si">}</span><span class="s2"> features&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1.-Custom-model-configs">
+<h2>1. Custom model configs<a class="headerlink" href="#1.-Custom-model-configs" title="Link to this heading"></a></h2>
+<p>Each JSON file in the config folder corresponds to one trained model instance (a <code class="docutils literal notranslate"><span class="pre">Unit</span></code>). The sub-folder name selects the model family.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Sub-folder</p></th>
+<th class="head"><p>Model class</p></th>
+<th class="head"><p>Backend</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logreg</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">LogReg_Classifier</span></code></p></td>
+<td><p>scikit-learn</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">svc</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SVM_Classifier</span></code></p></td>
+<td><p>scikit-learn</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mnb</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MNB_Classifier</span></code></p></td>
+<td><p>scikit-learn</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xgb</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">XGB_Classifier</span></code></p></td>
+<td><p>XGBoost</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mlp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NN_Classifier</span></code> (MLP)</p></td>
+<td><p>PyTorch Lightning</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">resnet</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NN_Classifier</span></code> (ResNet)</p></td>
+<td><p>PyTorch Lightning</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rnn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NN_Classifier</span></code> (RNN)</p></td>
+<td><p>PyTorch Lightning</p></td>
+</tr>
+</tbody>
+</table>
+<p>Required keys in each JSON: <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">model_params</span></code>. Neural-net configs also have a <code class="docutils literal notranslate"><span class="pre">train_config</span></code> section.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">config_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;ageas_cfg_&quot;</span><span class="p">)</span>
+
+<span class="c1"># --- Logistic regression with L1 penalty ---</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="s2">&quot;logreg&quot;</span><span class="p">))</span>
+<span class="n">logreg_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_epochs&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;model_params&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;penalty&quot;</span><span class="p">:</span> <span class="s2">&quot;l1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="s2">&quot;saga&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="s2">&quot;logreg&quot;</span><span class="p">,</span> <span class="s2">&quot;logreg_l1_C1.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">logreg_cfg</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># --- XGBoost ---</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="s2">&quot;xgb&quot;</span><span class="p">))</span>
+<span class="n">xgb_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_epochs&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;model_params&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;booster&quot;</span><span class="p">:</span> <span class="s2">&quot;gbtree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;train_config&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;num_boost_round&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;early_stopping_rounds&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;verbose_eval&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="s2">&quot;xgb_fast.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">xgb_cfg</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">hangar</span> <span class="o">=</span> <span class="n">Hangar</span><span class="p">(</span><span class="n">config_dir</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hangar: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hangar</span><span class="o">.</span><span class="n">units</span><span class="p">)</span><span class="si">}</span><span class="s2"> units | Units: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">hangar</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-n_iter_boost_selection">
+<h2>2. <code class="docutils literal notranslate"><span class="pre">n_iter_boost_selection</span></code><a class="headerlink" href="#2.-n_iter_boost_selection" title="Link to this heading"></a></h2>
+<p>Boost selection is most useful when you start with thousands of genes and want to narrow down to a compact candidate set before final training. Each iteration:</p>
+<ol class="arabic simple">
+<li><p>Runs <code class="docutils literal notranslate"><span class="pre">n_kfold_selection</span></code> on the current (shrinking) feature set</p></li>
+<li><p>Debriefs the surviving models to score features</p></li>
+<li><p>Keeps the top <code class="docutils literal notranslate"><span class="pre">extract_top_n</span> <span class="pre">/</span> <span class="pre">extract_ratio^(iter)</span></code> genes</p></li>
+</ol>
+<p>After all boost iterations a final selection is run on the pruned features.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deck</span><span class="p">,</span> <span class="n">fea_kept</span> <span class="o">=</span> <span class="n">n_iter_boost_selection</span><span class="p">(</span>
+    <span class="n">hangar</span><span class="o">=</span><span class="n">hangar</span><span class="p">,</span>
+    <span class="n">query_dataset</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span>
+    <span class="n">test_dataset</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span>
+    <span class="n">max_boost_iter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">extract_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">extract_top_n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>          <span class="c1"># target: 8 genes after boosting</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">selection_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">kfold_selection_list</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">valid_fraction</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">monitor_metric</span><span class="o">=</span><span class="s2">&quot;test.accuracy&quot;</span><span class="p">,</span>
+        <span class="n">retention_point</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">cutoff_point</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Features kept  : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fea_kept</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Surviving units: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span class="n">squad</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Retained genes :&quot;</span><span class="p">,</span> <span class="n">fea_kept</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.-n_iter_extraction">
+<h2>3. <code class="docutils literal notranslate"><span class="pre">n_iter_extraction</span></code><a class="headerlink" href="#3.-n_iter_extraction" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">n_iter_extraction</span></code> is the full regulatory factor discovery pipeline. It goes beyond boost selection by:</p>
+<ul class="simple">
+<li><p>Removing <strong>IQR outlier features</strong> between iterations (genes with extreme attribution scores are flagged rather than trusted)</p></li>
+<li><p><strong>L1-aggregating</strong> explanation scores across all iterations</p></li>
+<li><p>Returning a <strong>ranked factor table</strong> per class</p></li>
+</ul>
+<p>The returned <code class="docutils literal notranslate"><span class="pre">top_factors</span></code> table has a column <code class="docutils literal notranslate"><span class="pre">Outlier_Iter</span></code> — genes pruned as outliers in iteration <code class="docutils literal notranslate"><span class="pre">i</span></code> have <code class="docutils literal notranslate"><span class="pre">Outlier_Iter</span> <span class="pre">=</span> <span class="pre">i</span></code>; normal genes have <code class="docutils literal notranslate"><span class="pre">Outlier_Iter</span> <span class="pre">=</span> <span class="pre">-1</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_factors</span><span class="p">,</span> <span class="n">final_exp</span> <span class="o">=</span> <span class="n">n_iter_extraction</span><span class="p">(</span>
+    <span class="n">hangar</span><span class="o">=</span><span class="n">hangar</span><span class="p">,</span>
+    <span class="n">query_dataset</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span>
+    <span class="n">test_dataset</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span>
+    <span class="n">max_extraction_iter</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">extract_top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>          <span class="c1"># top 5 factors per class</span>
+    <span class="n">use_gene_names</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>      <span class="c1"># index by adata.var[&#39;name&#39;]</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">selection_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">kfold_selection_list</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">valid_fraction</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">monitor_metric</span><span class="o">=</span><span class="s2">&quot;test.accuracy&quot;</span><span class="p">,</span>
+        <span class="n">retention_point</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">cutoff_point</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top regulatory factors:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">top_factors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final integrated explanation (first 5 rows):&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">final_exp</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="4.-Inspecting-per-unit-reports">
+<h2>4. Inspecting per-unit reports<a class="headerlink" href="#4.-Inspecting-per-unit-reports" title="Link to this heading"></a></h2>
+<p>After every selection pass, each <code class="docutils literal notranslate"><span class="pre">Unit</span></code> in <code class="docutils literal notranslate"><span class="pre">deck.squad</span></code> accumulates a nested report dict:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>unit.report[operation_name][&#39;fold_1&#39;]   → per-fold metrics
+unit.report[operation_name][&#39;final&#39;]    → last-mission metrics
+</pre></div>
+</div>
+<p>This is useful for diagnosing which models perform well and on which folds.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">deck</span><span class="o">.</span><span class="n">squad</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">op_name</span><span class="p">,</span> <span class="n">op_report</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;final&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">op_report</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="n">op_report</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;vali&quot;</span><span class="p">]</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span> <span class="k">if</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;vali&quot;</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="n">uid</span><span class="p">,</span>
+            <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="n">op_name</span><span class="p">,</span>
+            <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">.accuracy&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;auroc&quot;</span><span class="p">:</span>    <span class="n">source</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">.auroc&quot;</span><span class="p">),</span>
+        <span class="p">})</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="5.-Saving-and-reloading-trained-models">
+<h2>5. Saving and reloading trained models<a class="headerlink" href="#5.-Saving-and-reloading-trained-models" title="Link to this heading"></a></h2>
+<p>Each <code class="docutils literal notranslate"><span class="pre">Unit</span></code> has a <code class="docutils literal notranslate"><span class="pre">.model</span></code> attribute whose <code class="docutils literal notranslate"><span class="pre">save_model</span></code> / <code class="docutils literal notranslate"><span class="pre">load_model</span></code> methods persist the underlying estimator in its native format (JSON for sklearn models, XGBoost binary format, PyTorch state-dict for NN models).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;ageas_saved_&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">deck</span><span class="o">.</span><span class="n">squad</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">.model&quot;</span><span class="p">)</span>
+    <span class="n">unit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">model_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># To reload later:</span>
+<span class="c1">#   unit.model.load_model(model_path)</span>
+
+<span class="c1"># Cleanup</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="02_data_preparation.html" class="btn btn-neutral float-left" title="Tutorial 02 — Data preparation and corpus construction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

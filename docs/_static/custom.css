@@ -1,0 +1,24 @@
+/* 1. Increase font size in autosummary tables */
+table.autosummary td {
+    font-size: 100% !important; /* Forces it to match standard paragraph text */
+}
+
+/* 2. Increase font size of sub-modules/functions in the left sidebar */
+.wy-menu-vertical li.toctree-l2 a,
+.wy-menu-vertical li.toctree-l3 a,
+.wy-menu-vertical li.toctree-l4 a {
+    font-size: 95% !important;
+}
+
+/* 3. Increase font size of the class/function signatures in the main content */
+dl.py.class dt .descclassname,
+dl.py.class dt .descname,
+dl.py.function dt .descclassname,
+dl.py.function dt .descname {
+    font-size: 100% !important;
+}
+
+/* Make the inline literal text a bit larger and easier to read */
+code.literal {
+    font-size: 95% !important;
+}

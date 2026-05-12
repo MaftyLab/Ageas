@@ -1,0 +1,14 @@
+{
+    "max_epochs": 1,
+    "model_params" : {
+        "penalty": "l1",
+        "dual": false,
+        "tol": 1e-4,
+        "C": 0.1,
+        "fit_intercept": true,
+        "intercept_scaling": 1.0,
+        "class_weight": "balanced",
+        "random_state": null,
+        "solver": "saga"
+    }
+}

@@ -1,0 +1,466 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Tutorial 02 — Data preparation and corpus construction\n",
+    "\n",
+    "Ageas consumes AnnData (`.h5ad`) files through its corpus classes.  This\n",
+    "tutorial explains the expected AnnData layout, demonstrates how to build and\n",
+    "inspect a `Multimodal_Corpus`, and shows the built-in k-fold splitter.\n",
+    "\n",
+    "**Topics:**\n",
+    "- Required AnnData structure (obs labels, var gene names, X values)\n",
+    "- `Multimodal_Corpus` vs `Repr_Corpus`\n",
+    "- `kfold_random_split`: training / validation / test splits\n",
+    "- Oversampling with `'repeat'` to balance classes\n",
+    "- Inspecting batches and slicing the corpus"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import warnings\n",
+    "\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "\n",
+    "from ageas.tool import (\n",
+    "    Multimodal_Corpus,\n",
+    "    Repr_Corpus,\n",
+    "    kfold_random_split,\n",
+    "    make_fake_adata,\n",
+    ")\n",
+    "\n",
+    "warnings.filterwarnings(\"ignore\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 1. AnnData layout required by Ageas\n",
+    "\n",
+    "| Slot | Key | Content |\n",
+    "|------|-----|---------|\n",
+    "| `obs` | `label_key` | Cell-type / condition string |\n",
+    "| `var` | `'name'` | Gene symbol (needed by `use_gene_names=True`) |\n",
+    "| `X` | — | Non-negative expression matrix (cells × genes), already normalised |\n",
+    "\n",
+    "`make_fake_adata` creates a compliant toy dataset:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Seed set to 42\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "AnnData object with n_obs × n_vars = 100 × 20\n",
+      "    obs: 'celltype'\n",
+      "    var: 'name'\n",
+      "\n",
+      "obs (first 5):\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>celltype</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>fake_cell_0</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_cell_1</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_cell_2</th>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_cell_3</th>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_cell_4</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            celltype\n",
+       "fake_cell_0        0\n",
+       "fake_cell_1        0\n",
+       "fake_cell_2        1\n",
+       "fake_cell_3        1\n",
+       "fake_cell_4        0"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "var (first 5):\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>name</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>fake_gene_0</th>\n",
+       "      <td>fake_gene_0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_gene_1</th>\n",
+       "      <td>fake_gene_1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_gene_2</th>\n",
+       "      <td>fake_gene_2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_gene_3</th>\n",
+       "      <td>fake_gene_3</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fake_gene_4</th>\n",
+       "      <td>fake_gene_4</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                    name\n",
+       "fake_gene_0  fake_gene_0\n",
+       "fake_gene_1  fake_gene_1\n",
+       "fake_gene_2  fake_gene_2\n",
+       "fake_gene_3  fake_gene_3\n",
+       "fake_gene_4  fake_gene_4"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "adata = make_fake_adata(n_class=2, n_clusters_per_class=2)\n",
+    "print(adata)\n",
+    "print(\"\\nobs (first 5):\")\n",
+    "display(adata.obs.head())\n",
+    "print(\"\\nvar (first 5):\")\n",
+    "display(adata.var.head())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "If you are bringing your own data, make sure:\n",
+    "- `adata.X` contains non-negative values (counts or log1p-normalised counts)\n",
+    "- `adata.obs[label_key]` exists and is a string or integer column\n",
+    "- (Optional) `adata.var['name']` holds human-readable gene symbols"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Save to disk — corpora are always constructed from file paths.\n",
+    "adata_path = \"/tmp/ageas_tut02.h5ad\"\n",
+    "adata.write_h5ad(adata_path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 2. Multimodal_Corpus\n",
+    "\n",
+    "`Multimodal_Corpus` is the standard corpus class.  It:\n",
+    "- reads the `.h5ad` file (optionally memory-mapped with `backed=True`)\n",
+    "- builds a `label_dict` mapping integer index → string label\n",
+    "- implements `torch.utils.data.Dataset` so batches can be streamed"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Label map: {0: 0, 1: 1}\n",
+      "Cells: 100 | Genes: 20\n"
+     ]
+    }
+   ],
+   "source": [
+    "corpus = Multimodal_Corpus(\n",
+    "    adata_path,\n",
+    "    label_key=\"celltype\",\n",
+    "    backed=False,   # True for large files (memory-maps the array)\n",
+    ")\n",
+    "print(\"Label map:\", corpus.label_dict)\n",
+    "print(\"Cells:\", len(corpus), \"| Genes:\", corpus.adata.n_vars)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "data shape: (1, 20), label: 0 (0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Access a single sample (returns a (data_tensor, label_tensor) tuple)\n",
+    "data, label = corpus[0]\n",
+    "print(f\"data shape: {data.shape}, label: {label} ({corpus.label_dict[label]})\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 3. Repr_Corpus: multiple representation layers\n",
+    "\n",
+    "`Repr_Corpus` can stack multiple layers of the AnnData into one feature\n",
+    "tensor — for example raw counts (`'X'`) concatenated with a PCA embedding\n",
+    "(`'X_pca'`).\n",
+    "\n",
+    "```python\n",
+    "# Example (requires adata.obsm['X_pca'] to exist):\n",
+    "corpus = Repr_Corpus(adata_path, label_key='celltype', layers=['X', 'X_pca'])\n",
+    "```\n",
+    "\n",
+    "When `layers=['X']` (default), `Repr_Corpus` behaves identically to\n",
+    "`Multimodal_Corpus`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 4. K-fold splitting\n",
+    "\n",
+    "`kfold_random_split` returns three parallel lists — one entry per fold —\n",
+    "each containing a sub-corpus.  It handles optional class stratification and\n",
+    "oversampling."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Fold 1: train=59, valid=7, test=34\n",
+      "Fold 2: train=60, valid=7, test=33\n",
+      "Fold 3: train=60, valid=7, test=33\n"
+     ]
+    }
+   ],
+   "source": [
+    "train_list, valid_list, test_list = kfold_random_split(\n",
+    "    corpus,\n",
+    "    n_splits=3,             # 3-fold: each fold uses ~1/3 as test\n",
+    "    valid_fraction=0.1,     # hold out 10% of the training portion for validation\n",
+    "    stratified_test=True,   # preserve class ratio in each test fold\n",
+    "    stratified_valid=True,\n",
+    "    random_seed=42,\n",
+    ")\n",
+    "\n",
+    "for i, (tr, va, te) in enumerate(zip(train_list, valid_list, test_list)):\n",
+    "    print(f\"Fold {i+1}: train={len(tr)}, valid={len(va)}, test={len(te)}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 5. Handling class imbalance with oversampling\n",
+    "\n",
+    "Pass `oversample_method='repeat'` to duplicate minority-class samples in\n",
+    "the training folds.  The target size is controlled by `oversample_by`:\n",
+    "`'max'`, `'mean'`, or `'median'`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Seed set to 42\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Counts before: {0: 50, 1: 50}\n",
+      "Counts after (fold 0 train): {tensor(0): 24, tensor(1): 13, tensor(1): 11}\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Create an imbalanced corpus (class 1 has only 10 samples)\n",
+    "adata_imbal = make_fake_adata(n_class=2, n_clusters_per_class=1)\n",
+    "class1_idx = adata_imbal.obs[adata_imbal.obs[\"celltype\"] == \"celltype_1\"].index\n",
+    "keep_mask = ~adata_imbal.obs.index.isin(class1_idx[10:])\n",
+    "adata_imbal = adata_imbal[keep_mask].copy()\n",
+    "adata_imbal.write_h5ad(\"cache/ageas_tut02_imbal.h5ad\")\n",
+    "\n",
+    "imbal_corpus = Multimodal_Corpus(\"cache/ageas_tut02_imbal.h5ad\", label_key=\"celltype\")\n",
+    "\n",
+    "labels = [imbal_corpus[i][1] for i in range(len(imbal_corpus))]\n",
+    "print(\"Counts before:\", pd.Series(labels).value_counts().to_dict())\n",
+    "\n",
+    "train_over, _, _ = kfold_random_split(\n",
+    "    imbal_corpus,\n",
+    "    n_splits=2,\n",
+    "    oversample_method=\"repeat\",\n",
+    "    oversample_by=\"max\",\n",
+    "    random_seed=0,\n",
+    ")\n",
+    "labels_after = [train_over[0][i][1] for i in range(len(train_over[0]))]\n",
+    "print(\"Counts after (fold 0 train):\", pd.Series(labels_after).value_counts().to_dict())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 6. Corpus slicing\n",
+    "\n",
+    "`corpus.copy()` deep-copies a corpus so you can safely subset its `.adata`\n",
+    "without touching the original.  The iterative operation pipelines use this\n",
+    "internally to trim the feature axis between rounds."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Sliced corpus genes : 5\n",
+      "Original corpus genes: 20  (unchanged)\n"
+     ]
+    }
+   ],
+   "source": [
+    "sub_corpus = corpus.copy()\n",
+    "sub_corpus.adata = sub_corpus.adata[:, :5]   # keep first 5 genes\n",
+    "\n",
+    "print(f\"Sliced corpus genes : {sub_corpus.adata.n_vars}\")\n",
+    "print(f\"Original corpus genes: {corpus.adata.n_vars}  (unchanged)\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

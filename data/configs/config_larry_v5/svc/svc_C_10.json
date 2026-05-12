@@ -1,0 +1,22 @@
+{
+    "max_epochs": 1,
+    "model_params": {
+        "scaler_copy": true,
+        "scaler_with_mean": true,
+        "scaler_with_std": true,
+        "C": 10,
+        "kernel": "linear",
+        "degree": 3,
+        "gamma": "scale",
+        "coef0": 0.0,
+        "shrinking": true,
+        "tol": 0.001,
+        "cache_size": 200,
+        "class_weight": null,
+        "verbose": false,
+        "max_iter": -1,
+        "decision_func_shape": "ovr",
+        "break_ties": false,
+        "random_state": null
+    }
+}

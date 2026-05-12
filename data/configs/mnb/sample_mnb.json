@@ -1,0 +1,9 @@
+{
+    "max_epochs": 1,
+    "model_params" : {
+        "alpha": 1.0,
+        "force_alpha": true,
+        "fit_prior": true,
+        "class_prior": null
+    }
+}

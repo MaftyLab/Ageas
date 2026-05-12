@@ -1,0 +1,15 @@
+*.pyc
+*.model
+/*.egg-info
+/*.egg
+/dist/
+/.git/
+/build
+/docs/supplementary
+*/cache/*
+*/lightning_logs/*
+*/wandb/*
+*/.ipynb_checkpoints/*
+*/.pytest
+*/cache/*
+*.claude

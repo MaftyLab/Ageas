@@ -1,0 +1,12 @@
+torch >= 2.5.1
+shap == 0.45.1
+captum >= 0.8.0
+pytorch-lightning >= 2.2.0
+torchmetrics >= 1.6.1
+xgboost >= 2.0.3
+scikit-learn == 1.5.1
+imbalanced-learn >= 0.13.0
+numpy >= 1.26.4
+pandas >= 2.2.2
+anndata >= 0.10.8
+hdf5plugin >= 4.3.0
