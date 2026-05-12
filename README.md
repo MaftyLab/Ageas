@@ -1,18 +1,27 @@
 # Ageas
 
-**AutoML-based Genetic regulatory Element extrAction System**
-
-Ageas is a multi-model framework for identifying class-specific regulatory
-factors from single-cell omics data. It trains a heterogeneous panel of
-classifiers — neural networks (MLP/RNN, ResNet-mixer) alongside classical
-models (XGBoost, Logistic Regression, SVM, Naive Bayes) — over a `Hangar`
-of candidate units, runs n-iteration k-fold cross-validation through a
-`Deck`, and aggregates per-class model explanations (Integrated Gradients,
-SHAP, or model coefficients) into a unified factor importance table.
+Ageas is a computational framework for inferring cell fate bias from static single-cell and spatial multi-omics data. Instead of relying on time-series measurements, pseudotime ordering, or experimental lineage tracing, Ageas learns fate-discriminative molecular features from annotated terminal cell populations and transfers this information to progenitor or intermediate cells.
 
 > This project is under active development.
 
 ## Key Features
+
+- **Time-agnostic fate inference**  
+  Infers fate bias from static molecular profiles without requiring time-resolved sampling, pseudotime trajectories, or genetic lineage labels.
+
+- **Transfer learning from terminal states**  
+  Learns fate-discriminative molecular features from annotated terminal populations and projects these features onto progenitor or intermediate cells.
+
+- **Data-adaptive ensemble modeling**  
+  Evaluates multiple model architectures and retains well-performing models to construct a robust ensemble for fate-bias prediction.
+
+- **Multi-modal compatibility**  
+  Supports single-cell RNA-seq, single-cell chromatin accessibility, inferred transcription factor activity, and spatial transcriptomic profiles.
+
+- **Model interpretation**  
+  Prioritizes genes, regulatory elements, or transcription factor activities associated with predicted fate bias using model-specific attribution strategies.
+
+## Core implementation modules
 
 - **Heterogeneous model panel.** Mixes deep-learning classifiers
   (`NN_Classifier`, `Mixer_Classifier`) with classical estimators
