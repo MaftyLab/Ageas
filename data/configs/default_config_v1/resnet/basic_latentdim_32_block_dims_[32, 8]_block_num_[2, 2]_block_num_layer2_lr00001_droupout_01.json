@@ -1,27 +1,28 @@
 {
     "max_epochs": 5,
     "model_params": {
-        "latent_fea_dim": 32,
-        "block": "RNN_Residual_Encoder",
-        "block_layer_type": "LSTM",
-        "block_num_layer": 1,
+        "latent_planes": 64,
+        "block": "ResNet_Basic",
         "block_nums": [
-            2,
-            2
+            1,
+            1
         ],
-        "block_dims": [
-            16,
+        "block_planes": [
+            32,
             8
         ],
-        "nonlinearity": "tanh",
-        "bias": true,
-        "dropout": 0.0,
-        "bidirectional": true,
-        "proj_size": 0,
-        "norm_layer": "LayerNorm"
+        "dropout": 0.1,
+        "zero_init_residual": false,
+        "groups": 1,
+        "dilation": 1,
+        "width_per_group": 64,
+        "replace_stride_with_dilation": false,
+        "norm_layer": "BatchNorm1d",
+        "latent_fea_dim": 10,
+        "global_conv": true
     },
     "train_config": {
-        "batch_size": 10,
+        "batch_size": 100,
         "precision": 32,
         "num_nodes": 1,
         "log_every_n_steps": 1,
@@ -46,7 +47,7 @@
         "sch_T_0": 10,
         "sch_T_mult": 2,
         "sch_eta_min": 0.001,
-        "lr": 0.01,
+        "lr": 0.0001,
         "dropout": 0.1
     }
 }

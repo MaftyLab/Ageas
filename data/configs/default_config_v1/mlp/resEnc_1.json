@@ -1,28 +1,20 @@
 {
-    "max_epochs": 5,
+    "max_epochs": 1,
     "model_params": {
-        "latent_planes": 64,
-        "latent_fea_dim": 10,
-        "global_conv": true,
-        "block": "ResNet_Basic",
+        "block": "Residual_Encoder",
         "block_nums": [
-            1,
-            1
+            2
         ],
-        "block_planes": [
-            32,
-            8
+        "block_dims": [
+            16
         ],
+        "bias": true,
         "dropout": 0.1,
-        "zero_init_residual": false,
-        "groups": 1,
-        "dilation": 1,
-        "width_per_group": 64,
-        "replace_stride_with_dilation": false,
-        "norm_layer": "BatchNorm1d"
+        "norm_layer": "LayerNorm",
+        "latent_fea_dim": 128
     },
     "train_config": {
-        "batch_size": 100,
+        "batch_size": 200,
         "precision": 32,
         "num_nodes": 1,
         "log_every_n_steps": 1,
@@ -46,8 +38,6 @@
         "scheduler": "cosine",
         "sch_T_0": 10,
         "sch_T_mult": 2,
-        "sch_eta_min": 0.001,
-        "lr": 0.001,
-        "dropout": 0.2
+        "sch_eta_min": 0.001
     }
 }

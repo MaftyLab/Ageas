@@ -2,8 +2,6 @@
     "max_epochs": 2,
     "model_params": {
         "latent_planes": 32,
-        "latent_fea_dim": 3,
-        "global_conv": true,
         "block": "ResNet_Basic",
         "block_nums": [
             1,
@@ -19,7 +17,9 @@
         "dilation": 1,
         "width_per_group": 32,
         "replace_stride_with_dilation": false,
-        "norm_layer": "BatchNorm1d"
+        "norm_layer": "BatchNorm1d",
+        "latent_fea_dim": 3,
+        "global_conv": true
     },
     "train_config": {
         "batch_size": 100,

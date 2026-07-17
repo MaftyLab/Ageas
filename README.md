@@ -108,6 +108,20 @@ additional tutorials cover data preparation
 ([02_data_preparation.py](docs/tutorials/02_data_preparation.py)) and
 advanced usage ([03_advanced_usage.py](docs/tutorials/03_advanced_usage.py)).
 
+## Examples
+
+- Apply Ageas on scRNA-seq data:
+  [scripts/celltag-multi.ipynb](scripts/celltag-multi.ipynb)
+- Apply Ageas on spatial transcriptomics data:
+  [scripts/spatial_example.ipynb](scripts/spatial_example.ipynb)
+
+## Model Config
+
+Ageas is a selection- and evaluation-based framework. It requires an input
+model config to define the candidate model panel and selection behavior. The
+default config is available at
+[data/configs/default_config_v1](data/configs/default_config_v1).
+
 ## Documentation
 
 Full docs are hosted on [GitHub Pages](https://maftylab.github.io/Ageas/html/index.html)
