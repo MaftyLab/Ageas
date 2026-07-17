@@ -61,6 +61,13 @@ pip install .
 This pulls in the core dependencies: PyTorch, PyTorch Lightning, XGBoost,
 scikit-learn, imbalanced-learn, AnnData, SHAP, and Captum.
 
+## Model Config
+
+Ageas is a selection- and evaluation-based framework. It requires an input
+model config to define the candidate model panel and selection behavior. The
+default config is available at
+[data/configs/default_config_v1](data/configs/default_config_v1).
+
 ## Quickstart
 
 The snippet below runs the full pipeline on synthetic data and prints the
@@ -83,7 +90,7 @@ corpus = Multimodal_Corpus(
 )
 
 # 3. Load a panel of candidate models
-hangar = Hangar("data/configs/sample_panel")
+hangar = Hangar("data/configs/default_config_v1")
 
 # 4. K-fold selection — keep models above the retention threshold
 deck = n_kfold_selection(
@@ -115,12 +122,6 @@ advanced usage ([03_advanced_usage.py](docs/tutorials/03_advanced_usage.py)).
 - Apply Ageas on spatial transcriptomics data:
   [scripts/spatial_example.ipynb](scripts/spatial_example.ipynb)
 
-## Model Config
-
-Ageas is a selection- and evaluation-based framework. It requires an input
-model config to define the candidate model panel and selection behavior. The
-default config is available at
-[data/configs/default_config_v1](data/configs/default_config_v1).
 
 ## Documentation
 
