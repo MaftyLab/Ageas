@@ -28,5 +28,6 @@ datasets.
 .. toctree::
     :maxdepth: 1
 
+    Classification Benchmark on Zheng68K PBMCs <examples/benchmark_zheng68k>
     Multimodal CellTag Lineage Inference <examples/celltag-multi>
     Spatial Transcriptomics Analysis <examples/spatial_example>

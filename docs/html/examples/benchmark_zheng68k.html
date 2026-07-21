@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmarking Ageas Classification on Zheng68K PBMCs &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multimodal CellTag Lineage Inference" href="celltag-multi.html" />
+    <link rel="prev" title="Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs" href="../tutorials/03_advanced_usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../examples.html#id1">Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Classification Benchmark on Zheng68K PBMCs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#1.-Load-the-Zheng68K-PBMC-dataset">1. Load the Zheng68K PBMC dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2.-Preprocess">2. Preprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3.-Hold-out-a-stratified-test-set">3. Hold out a stratified test set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4.-Build-the-Ageas-corpora-and-model-panel">4. Build the Ageas corpora and model panel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#5.-Five-fold-cross-validation-selection">5. Five-fold cross-validation selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#6.-Predict-on-the-held-out-set">6. Predict on the held-out set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#7.-Benchmark-metrics">7. Benchmark metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#8.-Confusion-matrix">8. Confusion matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#9.-Visualise-predictions-on-a-UMAP">9. Visualise predictions on a UMAP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="celltag-multi.html">Multimodal CellTag Lineage Inference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spatial_example.html">Spatial Transcriptomics Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Tutorials and Examples</a></li>
+      <li class="breadcrumb-item active">Benchmarking Ageas Classification on Zheng68K PBMCs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/benchmark_zheng68k.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Benchmarking-Ageas-Classification-on-Zheng68K-PBMCs">
+<h1>Benchmarking Ageas Classification on Zheng68K PBMCs<a class="headerlink" href="#Benchmarking-Ageas-Classification-on-Zheng68K-PBMCs" title="Link to this heading"></a></h1>
+<p>Reliable classification of terminal cell states is the foundation of the Ageas fate-inference pipeline: the ensemble must first learn the fate-memory signatures that separate mature cell types before it can transfer them to progenitor cells. This example reproduces the classification benchmark from the Ageas manuscript on the <strong>Zheng68K</strong> peripheral blood mononuclear cell (PBMC) dataset — a demanding benchmark characterised by pronounced class imbalance and high transcriptional similarity among
+closely related immune subtypes.</p>
+<p>Following the manuscript, we use a <strong>five-fold cross-validation</strong> selection strategy and report <strong>accuracy</strong> and <strong>macro F1</strong> on a held-out split. On the full dataset, Ageas reaches a median accuracy of ~0.83 and a median macro F1 of ~0.72 across the five folds, matching or exceeding correlation-based (Seurat, SingleR) and deep-learning (scANVI, TOSICA) baselines.</p>
+<blockquote>
+<div><p><strong>Note.</strong> This notebook is configured for a CUDA GPU (<code class="docutils literal notranslate"><span class="pre">accelerator='cuda'</span></code>), matching the other Ageas examples. Training the full candidate panel over five folds on ~68k cells is compute-intensive; run it on a GPU machine to reproduce the benchmark end to end.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span>
+    <span class="n">f1_score</span><span class="p">,</span>
+    <span class="n">classification_report</span><span class="p">,</span>
+    <span class="n">confusion_matrix</span><span class="p">,</span>
+    <span class="n">ConfusionMatrixDisplay</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ageas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Hangar</span><span class="p">,</span> <span class="n">n_kfold_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ageas.tool</span><span class="w"> </span><span class="kn">import</span> <span class="n">Multimodal_Corpus</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="1.-Load-the-Zheng68K-PBMC-dataset">
+<h2>1. Load the Zheng68K PBMC dataset<a class="headerlink" href="#1.-Load-the-Zheng68K-PBMC-dataset" title="Link to this heading"></a></h2>
+<p>The dataset ships with the Ageas repository under <code class="docutils literal notranslate"><span class="pre">data/</span></code>. FACS-sorted labels in <code class="docutils literal notranslate"><span class="pre">adata.obs['celltype']</span></code> provide the ground-truth terminal cell identities. Printing the class distribution highlights the strong imbalance — from &gt;20k cytotoxic T cells down to a handful of rare subtypes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Path to the Zheng68K FACS-labelled dataset shipped in the Ageas repo (data/).</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="s1">&#39;../../data/LiuBIB_5_Zheng68K(PBMC)_FACS_label.h5ad&#39;</span>
+
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;celltype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;celltype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;celltype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Preprocess">
+<h2>2. Preprocess<a class="headerlink" href="#2.-Preprocess" title="Link to this heading"></a></h2>
+<p>We select the top 2,000 highly variable genes (Seurat v3, on raw counts) and normalise total counts per cell — the same preprocessing used in the other Ageas examples.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">highly_variable_genes</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;seurat_v3&#39;</span>
+<span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_total</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">adata</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.-Hold-out-a-stratified-test-set">
+<h2>3. Hold out a stratified test set<a class="headerlink" href="#3.-Hold-out-a-stratified-test-set" title="Link to this heading"></a></h2>
+<p>To score the benchmark we set aside 20% of cells as a held-out test set, stratified by cell type so that every class — including the rare ones — is represented in both splits.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">n_obs</span><span class="p">),</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;celltype&#39;</span><span class="p">],</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">adata_train</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">adata_test</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;train:&#39;</span><span class="p">,</span> <span class="n">adata_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;| test:&#39;</span><span class="p">,</span> <span class="n">adata_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="4.-Build-the-Ageas-corpora-and-model-panel">
+<h2>4. Build the Ageas corpora and model panel<a class="headerlink" href="#4.-Build-the-Ageas-corpora-and-model-panel" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Multimodal_Corpus</span></code> wraps each <code class="docutils literal notranslate"><span class="pre">AnnData</span></code> split for Ageas, using <code class="docutils literal notranslate"><span class="pre">celltype</span></code> as the categorical label. The <code class="docutils literal notranslate"><span class="pre">Hangar</span></code> loads the candidate model panel (neural networks and classical estimators) from a config folder.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_train</span> <span class="o">=</span> <span class="n">Multimodal_Corpus</span><span class="p">(</span>
+    <span class="n">adata</span><span class="o">=</span><span class="n">adata_train</span><span class="p">,</span> <span class="n">label_key</span><span class="o">=</span><span class="s1">&#39;celltype&#39;</span><span class="p">,</span> <span class="n">backed</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">corpus_test</span> <span class="o">=</span> <span class="n">Multimodal_Corpus</span><span class="p">(</span>
+    <span class="n">adata</span><span class="o">=</span><span class="n">adata_test</span><span class="p">,</span> <span class="n">label_key</span><span class="o">=</span><span class="s1">&#39;celltype&#39;</span><span class="p">,</span> <span class="n">backed</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Candidate model panel (logreg / mlp / resnet / rnn / svc) shipped with Ageas.</span>
+<span class="n">hangar</span> <span class="o">=</span> <span class="n">Hangar</span><span class="p">(</span><span class="s1">&#39;../../data/configs/default_config_v1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Candidate units:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hangar</span><span class="o">.</span><span class="n">units</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="5.-Five-fold-cross-validation-selection">
+<h2>5. Five-fold cross-validation selection<a class="headerlink" href="#5.-Five-fold-cross-validation-selection" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">n_kfold_selection</span></code> runs a single <strong>5-fold</strong> cross-validation round over the candidate panel, ranking units by test accuracy and retaining the strongest ones into the final ensemble (<code class="docutils literal notranslate"><span class="pre">Deck</span></code>). Per-fold splits are class-stratified and oversampling is enabled to counter the pronounced class imbalance.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deck</span> <span class="o">=</span> <span class="n">n_kfold_selection</span><span class="p">(</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">,</span>
+    <span class="n">query_dataset</span><span class="o">=</span><span class="n">corpus_train</span><span class="p">,</span>
+    <span class="n">hangar</span><span class="o">=</span><span class="n">hangar</span><span class="p">,</span>
+    <span class="n">kfold_selection_list</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>        <span class="c1"># single 5-fold cross-validation round</span>
+    <span class="n">monitor_metric</span><span class="o">=</span><span class="s1">&#39;test.accuracy&#39;</span><span class="p">,</span>
+    <span class="n">stratified_kfold_test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>      <span class="c1"># preserve class proportions across folds</span>
+    <span class="n">stratified_kfold_valid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">oversample_method</span><span class="o">=</span><span class="s1">&#39;repeat&#39;</span><span class="p">,</span>      <span class="c1"># mitigate class imbalance</span>
+    <span class="n">retention_point</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="6.-Predict-on-the-held-out-set">
+<h2>6. Predict on the held-out set<a class="headerlink" href="#6.-Predict-on-the-held-out-set" title="Link to this heading"></a></h2>
+<p>The selected ensemble averages class probabilities across its surviving units. <code class="docutils literal notranslate"><span class="pre">deck.predict</span></code> returns the probability matrix and the integer ground-truth labels in the corpus order.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_preds</span><span class="p">,</span> <span class="n">all_labels</span> <span class="o">=</span> <span class="n">deck</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">query_dataset</span><span class="o">=</span><span class="n">corpus_test</span><span class="p">)</span>
+
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">all_labels</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">all_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="7.-Benchmark-metrics">
+<h2>7. Benchmark metrics<a class="headerlink" href="#7.-Benchmark-metrics" title="Link to this heading"></a></h2>
+<p>We report the two metrics used in the manuscript — overall <strong>accuracy</strong> and <strong>macro F1</strong> (which weights every class equally and is therefore the more informative score under class imbalance) — together with a per-class breakdown.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">label_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">corpus_train</span><span class="o">.</span><span class="n">label_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corpus_train</span><span class="o">.</span><span class="n">label_dict</span><span class="p">))</span>
+<span class="p">]</span>
+
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">f1_macro</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accuracy : </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Macro F1 : </span><span class="si">{</span><span class="n">f1_macro</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span>
+    <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_names</span><span class="p">)),</span>
+    <span class="n">target_names</span><span class="o">=</span><span class="n">label_names</span><span class="p">,</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="8.-Confusion-matrix">
+<h2>8. Confusion matrix<a class="headerlink" href="#8.-Confusion-matrix" title="Link to this heading"></a></h2>
+<p>The confusion matrix reveals where the ensemble confuses transcriptionally similar immune subtypes (e.g. the closely related CD4+/CD8+ T-cell states).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_names</span><span class="p">)))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">label_names</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">xticks_rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Zheng68K benchmark  |  Acc=</span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, macro F1=</span><span class="si">{</span><span class="n">f1_macro</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="9.-Visualise-predictions-on-a-UMAP">
+<h2>9. Visualise predictions on a UMAP<a class="headerlink" href="#9.-Visualise-predictions-on-a-UMAP" title="Link to this heading"></a></h2>
+<p>Finally, we embed the held-out cells and colour them by their ground-truth and Ageas-predicted labels for a qualitative view of the classifier’s agreement.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus_test</span><span class="o">.</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">corpus_train</span><span class="o">.</span><span class="n">label_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y_pred</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">corpus_test</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">corpus_test</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">umap</span><span class="p">(</span><span class="n">corpus_test</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">umap</span><span class="p">(</span><span class="n">corpus_test</span><span class="o">.</span><span class="n">adata</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;celltype&#39;</span><span class="p">,</span> <span class="s1">&#39;pred&#39;</span><span class="p">],</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tutorials/03_advanced_usage.html" class="btn btn-neutral float-left" title="Tutorial 03 — Advanced usage: boost selection, extraction, and custom configs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="celltag-multi.html" class="btn btn-neutral float-right" title="Multimodal CellTag Lineage Inference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
