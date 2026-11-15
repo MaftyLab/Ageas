@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ageas.MoE_Deck &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ageas.profile_dataset" href="ageas.profile_dataset.html" />
+    <link rel="prev" title="ageas.moe_selection" href="ageas.moe_selection.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../v2.html">Feature-Routed Pipeline (v2)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#core-objects">Core Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#operations">Operations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#feature-routed-pipeline-v2">Feature-Routed Pipeline (v2)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ageas.run_pipeline.html">ageas.run_pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.PipelineResult.html">ageas.PipelineResult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.moe_selection.html">ageas.moe_selection</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ageas.MoE_Deck</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ageas.MoE_Deck"><code class="docutils literal notranslate"><span class="pre">MoE_Deck</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data-profile-and-panel-design-v2">Data Profile and Panel Design (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#validation-routing-and-integration-v2">Validation, Routing and Integration (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#graph-stage-v2">Graph Stage (v2)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">ageas.MoE_Deck</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/ageas.MoE_Deck.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ageas-moe-deck">
+<h1>ageas.MoE_Deck<a class="headerlink" href="#ageas-moe-deck" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ageas.MoE_Deck">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ageas.</span></span><span class="sig-name descname"><span class="pre">MoE_Deck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">competent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ageas.MoE_Deck" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Integrated experts of an Ageas v2 run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experts</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">Expert</span></code> for every integrated or
+competent unit.</p></li>
+<li><p><strong>weights</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">weight</span></code> from the no-harm selection;
+the weights sum to one.</p></li>
+<li><p><strong>competent</strong> – Units whose out-of-fold balanced accuracy is close to
+the best, ranked by out-of-fold loss: the committee’s candidates.</p></li>
+<li><p><strong>oof</strong> – Out-of-fold record of the run: per-unit probabilities on
+every terminal cell (<code class="docutils literal notranslate"><span class="pre">'probs'</span></code>), the labels, the fold indices, and
+each unit’s per-fold level, features and validation losses.</p></li>
+<li><p><strong>features</strong> – Feature names of the terminal corpus.</p></li>
+<li><p><strong>provenance</strong> – Which <code class="docutils literal notranslate"><span class="pre">ageas</span></code> the run imported (<code class="docutils literal notranslate"><span class="pre">ageas_path</span></code>) and
+the git state of that checkout (<code class="docutils literal notranslate"><span class="pre">ageas_commit</span></code>, <code class="docutils literal notranslate"><span class="pre">ageas_dirty</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.MoE_Deck.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">competent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#ageas.MoE_Deck.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.MoE_Deck.debrief">
+<span class="sig-name descname"><span class="pre">debrief</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_sample_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ageas.MoE_Deck.debrief" title="Link to this definition"></a></dt>
+<dd><p>Integrated per-class attribution over all features.</p>
+<p>Each expert explains <code class="docutils literal notranslate"><span class="pre">exp_dataset</span></code> on its own features, so the
+features it does not use score zero for it. The experts’ tables are
+combined as <code class="docutils literal notranslate"><span class="pre">A_c</span> <span class="pre">=</span> <span class="pre">sum_e</span> <span class="pre">w_e</span> <span class="pre">d_{e,c}</span></code> with the no-harm weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exp_dataset</strong> – Labelled dataset to explain.</p></li>
+<li><p><strong>exp_sample_limit</strong> – Cells per class explained by Integrated
+Gradients for neural-network experts.</p></li>
+<li><p><strong>device</strong> – Device for Integrated Gradients. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses each
+expert’s own accelerator.</p></li>
+<li><p><strong>kwargs</strong> – Forwarded to <a class="reference internal" href="ageas.explain_unit.html#ageas.explain_unit" title="ageas.explain_unit"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain_unit()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Table indexed by <code class="xref py py-attr docutils literal notranslate"><span class="pre">features</span></code> with one
+<code class="docutils literal notranslate"><span class="pre">Class_{i}_Scores</span></code> column per class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ageas.MoE_Deck.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_members</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#ageas.MoE_Deck.predict" title="Link to this definition"></a></dt>
+<dd><p>Ensemble-predict with the no-harm weights.</p>
+<p>Each expert sees only its own features, looked up by name in
+<code class="docutils literal notranslate"><span class="pre">query_dataset.features</span></code>, and the experts’ probabilities are
+averaged with <code class="xref py py-attr docutils literal notranslate"><span class="pre">weights</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_dataset</strong> – Dataset to score.</p></li>
+<li><p><strong>batch_size</strong> – Batch size for the prediction dataloader.</p></li>
+<li><p><strong>num_workers</strong> – Number of dataloader workers.</p></li>
+<li><p><strong>return_members</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, also return the probabilities of
+every expert, weighted or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(probs,</span> <span class="pre">labels)</span></code>, or <code class="docutils literal notranslate"><span class="pre">(probs,</span> <span class="pre">labels,</span> <span class="pre">member_probs)</span></code>
+with <code class="docutils literal notranslate"><span class="pre">return_members=True</span></code>. <code class="docutils literal notranslate"><span class="pre">labels</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> for an
+unlabelled dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ageas.moe_selection.html" class="btn btn-neutral float-left" title="ageas.moe_selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ageas.profile_dataset.html" class="btn btn-neutral float-right" title="ageas.profile_dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

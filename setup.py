@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name = "ageas",
-    version = "v0.0.1-alpha1",
+    version = "v0.1.0-alpha1",
     author = "nkmtmsys and JackSSK",
     author_email = "gyu@genzentrum.lmu.de, gyu17@alumni.jh.edu",
     description = "AutoML-based Genetic regulatory Element extrAction System",
@@ -34,6 +34,7 @@ setuptools.setup(
         "torchmetrics >= 1.6.1",
         "xgboost == 2.0.3",
         "scikit-learn >= 1.5.1",
+        "scipy >= 1.11",
         "imbalanced-learn >= 0.13.0",
         "numpy >= 1.26.4",
         "pandas >= 2.2.2",

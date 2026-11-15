@@ -13,3 +13,6 @@
 */.pytest
 */cache/*
 *.claude
+# revision workspace outputs and local dataset paths
+revision/results/
+revision/datasets.json

@@ -28,6 +28,61 @@ Operations
    ageas.n_iter_boost_selection
    ageas.n_iter_extraction
 
+Feature-Routed Pipeline (v2)
+----------------------------
+
+The label-free workflow (see :ref:`v2`) and the objects it returns.
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   ageas.run_pipeline
+   ageas.PipelineResult
+   ageas.moe_selection
+   ageas.MoE_Deck
+
+Data Profile and Panel Design (v2)
+----------------------------------
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   ageas.profile_dataset
+   ageas.design_panel
+   ageas.extend_panel
+   ageas.write_panel
+   ageas.UnitSpec
+   ageas.check_strategy
+
+Validation, Routing and Integration (v2)
+----------------------------------------
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   ageas.shift_weights
+   ageas.explain_unit
+   ageas.key_features
+   ageas.search_ladder
+   ageas.no_harm_selection
+   ageas.competent_units
+   ageas.select_committee
+   ageas.vote
+
+Graph Stage (v2)
+----------------
+
+.. autosummary::
+   :toctree: generated
+   :recursive:
+
+   ageas.graph_stage
+   ageas.graph_fate
+   ageas.fuse
+
 .. Neural Network Classifiers
 .. --------------------------
 

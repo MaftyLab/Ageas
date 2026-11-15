@@ -48,6 +48,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../v2.html">Feature-Routed Pipeline (v2)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#core-objects">Core Objects</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ageas.Hangar</a><ul>
@@ -59,6 +60,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#operations">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#feature-routed-pipeline-v2">Feature-Routed Pipeline (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data-profile-and-panel-design-v2">Data Profile and Panel Design (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#validation-routing-and-integration-v2">Validation, Routing and Integration (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#graph-stage-v2">Graph Stage (v2)</a></li>
 </ul>
 </li>
 </ul>
@@ -136,7 +141,9 @@ keeps all units.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Mapping <code class="docutils literal notranslate"><span class="pre">unit_id</span> <span class="pre">-&gt;</span> <span class="pre">Unit</span></code> for the units that survived the
-filter.</p>
+filter. Units are deep copies, so separate sorties (e.g. different
+seeds or extraction iterations) never share trained models or
+reports.</p>
 </dd>
 </dl>
 </dd></dl>

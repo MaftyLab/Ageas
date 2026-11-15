@@ -16,6 +16,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
+from ageas.tool import to_2d_numpy
 from .sk_template import Classifier_Template
 
 
@@ -100,26 +101,34 @@ class SVM_Classifier(Classifier_Template):
                 'explanation; explanations will be meaningless.'
             )
 
-    def apply_scaler(self, x) -> np.ndarray:
-        """Fit (or refit) the scaler on ``x`` and return the scaled features.
+    def apply_scaler(self, x, fit: bool = False) -> np.ndarray:
+        """Standard-scale ``x`` with the training-set statistics.
+
+        The scaler is fitted only when ``fit=True`` (i.e. during training);
+        prediction inputs are transformed with the stored training mean and
+        standard deviation, so predictions do not depend on how query cells
+        are batched.
 
         Args:
             x: Input feature tensor.
+            fit: If ``True``, (re)fit the scaler on ``x`` first.
 
         Returns:
             Standard-scaled feature matrix as :class:`numpy.ndarray`.
         """
-        self.scaler.fit(np.array(x.squeeze()))
-        return self.scaler.transform(np.array(x.squeeze()))
+        x = to_2d_numpy(x)
+        if fit:
+            self.scaler.fit(x)
+        return self.scaler.transform(x)
 
     def forward(self, x, y) -> None:
-        """Standard-scale ``x`` and fit the underlying SVC.
+        """Fit the scaler and the underlying SVC on the training batch.
 
         Args:
             x: Input feature tensor.
             y: Label tensor.
         """
-        self.model.fit(self.apply_scaler(x), np.array(y))
+        self.model.fit(self.apply_scaler(x, fit=True), np.array(y))
 
     def predict(self, x, y=None) -> np.ndarray:
         """Standard-scale ``x`` and return per-class probabilities.
@@ -132,3 +141,33 @@ class SVM_Classifier(Classifier_Template):
             Output of ``self.model.predict_proba`` on the scaled inputs.
         """
         return self.model.predict_proba(self.apply_scaler(x))
+
+    def class_coefficients(self) -> np.ndarray:
+        """Per-class coefficient vectors of a linear SVC.
+
+        Binary problems follow the template behaviour. For more than two
+        classes, :class:`~sklearn.svm.SVC` trains one-vs-one machines whose
+        rows are ordered ``(0, 1), (0, 2), ..., (1, 2), ...``; a positive
+        decision value votes for the first class of each pair. Each class
+        therefore receives the mean of its pairwise coefficient vectors,
+        oriented toward that class.
+
+        Returns:
+            Array of shape ``(num_class, n_features)``.
+        """
+        coef = np.atleast_2d(np.asarray(self.model.coef_, dtype=float))
+        classes = [int(c) for c in self.model.classes_]
+        if coef.shape[0] == 1:
+            return super().class_coefficients()
+
+        scores = np.zeros((self.hparams.model_params['num_class'], coef.shape[1]))
+        counts = np.zeros(scores.shape[0])
+        pair = 0
+        for i in range(len(classes)):
+            for j in range(i + 1, len(classes)):
+                scores[classes[i]] += coef[pair]
+                scores[classes[j]] -= coef[pair]
+                counts[classes[i]] += 1
+                counts[classes[j]] += 1
+                pair += 1
+        return scores / np.maximum(counts, 1)[:, None]

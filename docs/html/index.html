@@ -47,6 +47,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v2.html">Feature-Routed Pipeline (v2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
@@ -85,6 +86,12 @@ units. A <a class="reference internal" href="generated/ageas.Deck.html#ageas.Dec
 n-iteration k-fold cross-validation, retains the strongest units, and
 aggregates per-class explanations (Integrated Gradients, SHAP, or model
 coefficients) into a unified factor importance table.</p>
+<p>Since version 0.1, Ageas also offers a label-free, feature-routed pipeline
+(Ageas v2, <a class="reference internal" href="generated/ageas.run_pipeline.html#ageas.run_pipeline" title="ageas.run_pipeline"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_pipeline()</span></code></a>). It designs the panel for each
+dataset from a profile of the data, and narrows every unit to the features
+it relies on. It integrates only the units that help each other: a no-harm
+mixture and the vote of a committee of competent, distinct units. See
+<a class="reference internal" href="v2.html#v2"><span class="std std-ref">Feature-routed pipeline (Ageas v2)</span></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This project is under active development.</p>
@@ -107,6 +114,19 @@ factors per cell class.</p></li>
 <li><p><strong>Unified Explanation Pipeline:</strong> <a class="reference internal" href="generated/ageas.Deck.html#ageas.Deck.debrief" title="ageas.Deck.debrief"><code class="xref py py-meth docutils literal notranslate"><span class="pre">debrief()</span></code></a> weights
 per-unit explanations by their validation/test metrics and produces a
 single integrated importance table across the squad.</p></li>
+<li><p><strong>Label-Free Panel Design (v2):</strong> <a class="reference internal" href="generated/ageas.profile_dataset.html#ageas.profile_dataset" title="ageas.profile_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">profile_dataset()</span></code></a> and
+<a class="reference internal" href="generated/ageas.design_panel.html#ageas.design_panel" title="ageas.design_panel"><code class="xref py py-func docutils literal notranslate"><span class="pre">design_panel()</span></code></a> derive each dataset’s panel from rules stated
+before any run. <a class="reference internal" href="generated/ageas.shift_weights.html#ageas.shift_weights" title="ageas.shift_weights"><code class="xref py py-func docutils literal notranslate"><span class="pre">shift_weights()</span></code></a> steers validation toward
+progenitor-like terminal cells; no step uses progenitor labels.</p></li>
+<li><p><strong>Feature Routing and No-Harm Integration (v2):</strong>
+<a class="reference internal" href="generated/ageas.moe_selection.html#ageas.moe_selection" title="ageas.moe_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">moe_selection()</span></code></a> narrows every unit to the features its own
+attributions rank highest, as far as validation allows. It integrates units
+only when they lower the ensemble’s out-of-fold loss
+(<a class="reference internal" href="generated/ageas.no_harm_selection.html#ageas.no_harm_selection" title="ageas.no_harm_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">no_harm_selection()</span></code></a>), next to a committee vote
+(<a class="reference internal" href="generated/ageas.vote.html#ageas.vote" title="ageas.vote"><code class="xref py py-func docutils literal notranslate"><span class="pre">vote()</span></code></a>).</p></li>
+<li><p><strong>Graph Stage (v2):</strong> where unlabeled intermediate cells exist,
+<a class="reference internal" href="generated/ageas.graph_stage.html#ageas.graph_stage" title="ageas.graph_stage"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_stage()</span></code></a> fuses the vote with a random walk through
+them toward the terminal states.</p></li>
 </ul>
 </section>
 <section id="citation">
@@ -137,9 +157,20 @@ single integrated importance table across the squad.</p></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#id1">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="v2.html">Feature-Routed Pipeline (v2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="v2.html#the-pipeline">The pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="v2.html#panel-rules">Panel rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="v2.html#running-it">Running it</a></li>
+<li class="toctree-l2"><a class="reference internal" href="v2.html#protocol">Protocol</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#core-objects">Core Objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#operations">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#feature-routed-pipeline-v2">Feature-Routed Pipeline (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#data-profile-and-panel-design-v2">Data Profile and Panel Design (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#validation-routing-and-integration-v2">Validation, Routing and Integration (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#graph-stage-v2">Graph Stage (v2)</a></li>
 </ul>
 </li>
 </ul>

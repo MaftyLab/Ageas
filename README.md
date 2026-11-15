@@ -25,6 +25,9 @@ Ageas is a computational framework for inferring cell fate bias from static sing
 - **Model interpretation**  
   Prioritizes genes, regulatory elements, or transcription factor activities associated with predicted fate bias using model-specific attribution strategies.
 
+- **Label-free, per-dataset pipeline (Ageas v2)**  
+  `ageas.run_pipeline` designs its panel of models from a profile of each dataset. It narrows every model to the features it relies on, and integrates only models that help each other. No step uses progenitor labels.
+
 ## Core implementation modules
 
 - **Heterogeneous model panel.** Mixes deep-learning classifiers
@@ -115,6 +118,40 @@ additional tutorials cover data preparation
 ([02_data_preparation.py](docs/tutorials/02_data_preparation.py)) and
 advanced usage ([03_advanced_usage.py](docs/tutorials/03_advanced_usage.py)).
 
+## Feature-routed pipeline (Ageas v2)
+
+Version 0.1 adds a second workflow. `ageas.run_pipeline` works without a fixed model config or any progenitor label. It works out a panel for each dataset and builds an ensemble whose members help rather than hurt each other:
+
+1. **Profile the dataset** (`profile_dataset`) from the labelled terminal cells and the progenitors' features alone: input type, how far the progenitors sit from the mature cells, how both cluster, how ambiguous the progenitors look, and how curved the mature classes' boundary is.
+2. **Design the panel** (`design_panel`). Rules stated before any run turn the profile into unit configurations (regularisation, capacity, penalties, naive-Bayes smoothing) across logistic regression, linear SVM, naive Bayes, XGBoost, MLP, ResNet and RNN units.
+3. **Weight the terminal cells toward the progenitors** (`shift_weights`), so that validation favours units that hold up on progenitor-like cells.
+4. **Route every unit to its features** (`moe_selection`). Each unit trains on all features. Its own attributions then rank the features, and a pruning ladder narrows it as far as validation allows. Where validation prefers the edge of a rule's range, a second round adds one unit past it (`extend_panel`).
+5. **Integrate without harm.** The no-harm mixture (`no_harm_selection`) keeps units only if they lower the ensemble's out-of-fold loss. A committee of competent, distinct units (`competent_units`, `select_committee`) votes in log-odds (`vote`), with the mixture joining the vote.
+6. **Check the strategy** (`check_strategy`): do the units each rule favoured validate better than the ones it disfavoured?
+7. **Graph stage** (`graph_stage`). When the data hold unlabeled cells between the progenitors and the terminal states, a random walk over a neighbour graph of every cell is fused with the vote.
+
+Run it under the settings it was benchmarked with (`revision/v2/protocol.json`):
+
+```python
+import json
+import ageas
+
+protocol = json.load(open("revision/v2/protocol.json"))
+result = ageas.run_pipeline(
+    terminal_corpus,              # labelled terminal cells (Multimodal_Corpus)
+    progenitor_x,                 # progenitors' input, same features, no labels
+    workdir="ageas_v2_run",       # generated panel configs and Lightning logs
+    selection=protocol["selection"], routing=protocol["routing"],
+    synergy=protocol["synergy"], committee=protocol["committee"],
+    validation=protocol["pipeline"]["validation"], refine=protocol["pipeline"]["refine"],
+    seed=0,
+)
+result.query["final"]    # progenitor fate probabilities
+result.profile, result.panel, result.report   # the profile, the designed units, the strategy check
+```
+
+The full description is in [docs/v2.rst](docs/v2.rst). The benchmark, the comparison with baseline methods and the ablation of its components are in [revision/v2](revision/v2).
+
 ## Examples
 
 - Apply Ageas on scRNA-seq data:
@@ -129,7 +166,9 @@ Full docs are hosted on [GitHub Pages](https://maftylab.github.io/Ageas/html/ind
 
 - Installation: [docs/installation.rst](docs/installation.rst)
 - Tutorials: [docs/tutorials/](docs/tutorials/)
+- Feature-routed pipeline (Ageas v2): [docs/v2.rst](docs/v2.rst)
 - API reference: [docs/api.rst](docs/api.rst)
+- Tests: [tests/README.md](tests/README.md)
 
 Build the HTML docs locally:
 
@@ -141,13 +180,21 @@ cd docs && make html
 
 ```
 ageas/
-├── classical/   # XGBoost, LogReg, SVM, Naive Bayes, LinReg classifiers
-├── nn/          # Neural-network classifiers and building blocks
-├── ops/         # n_kfold_selection, n_iter_extraction, n_iter_boost_selection
-├── tool/        # Corpus loaders, explainers, trainers, config helpers
-├── deck.py      # Orchestrator for selection + ensemble prediction + debrief
-├── hangar.py    # Panel of candidate Units loaded from JSON config folders
-└── unit.py      # Wrapper around a single classifier configuration
+├── classical/    # XGBoost, LogReg, SVM, Naive Bayes, LinReg classifiers
+├── nn/           # Neural-network classifiers and building blocks
+├── ops/          # n_kfold_selection, n_iter_extraction, n_iter_boost_selection;
+│                 #   moe_selection (v2: routing and the out-of-fold record)
+├── tool/         # Corpus loaders, explainers, trainers, config helpers;
+│                 #   v2 parts: profile, shift, routing, synergy, committee,
+│                 #   strategy, graph, unit_explain, feature_corpus
+├── deck.py       # Orchestrator for selection + ensemble prediction + debrief
+├── moe_deck.py   # v2: the routed experts, their integration and prediction
+├── hangar.py     # Panel of candidate Units loaded from JSON config folders
+├── panel.py      # v2: panel design from the data profile
+├── pipeline.py   # v2: run_pipeline, the label-free workflow
+└── unit.py       # Wrapper around a single classifier configuration
+revision/v2/      # v2's frozen protocol, benchmark scripts and the R2.4 ablation
+tests/            # regression tests for both workflows (see tests/README.md)
 ```
 
 ## Citation

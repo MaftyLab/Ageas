@@ -12,6 +12,7 @@ Re-exports the residual building blocks defined in
 
 author: jy
 """
+from .blocks import *  # noqa: F401,F403  (the building blocks named in blocks.__all__)
 from .blocks import __all__ as blocks_all
 from .classifier import NN_Classifier, Mixer_Classifier
 

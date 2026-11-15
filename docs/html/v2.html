@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature-routed pipeline (Ageas v2) &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Spatial Transcriptomics Analysis" href="examples/spatial_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Feature-Routed Pipeline (v2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-pipeline">The pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#panel-rules">Panel rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-it">Running it</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol">Protocol</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Feature-routed pipeline (Ageas v2)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/v2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feature-routed-pipeline-ageas-v2">
+<span id="v2"></span><h1>Feature-routed pipeline (Ageas v2)<a class="headerlink" href="#feature-routed-pipeline-ageas-v2" title="Link to this heading"></a></h1>
+<p><a class="reference internal" href="generated/ageas.run_pipeline.html#ageas.run_pipeline" title="ageas.run_pipeline"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_pipeline()</span></code></a> is Ageas’s label-free workflow, introduced with
+version 0.1. The original workflow (<a class="reference internal" href="generated/ageas.Hangar.html#ageas.Hangar" title="ageas.Hangar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hangar</span></code></a>,
+<a class="reference internal" href="generated/ageas.n_kfold_selection.html#ageas.n_kfold_selection" title="ageas.n_kfold_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">n_kfold_selection()</span></code></a>, <a class="reference internal" href="generated/ageas.Deck.html#ageas.Deck" title="ageas.Deck"><code class="xref py py-class docutils literal notranslate"><span class="pre">Deck</span></code></a>) trains a fixed
+panel of models on every feature and keeps the ones that pass a validation
+gate. The v2 pipeline differs in three ways:</p>
+<ul class="simple">
+<li><p>it designs a panel for each dataset;</p></li>
+<li><p>it narrows every model (“unit”) to the features it relies on;</p></li>
+<li><p>it integrates only units that help each other.</p></li>
+</ul>
+<p>No step uses progenitor labels; they serve only to score a finished run.</p>
+<section id="the-pipeline">
+<h2>The pipeline<a class="headerlink" href="#the-pipeline" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Profile the dataset</strong> (<a class="reference internal" href="generated/ageas.profile_dataset.html#ageas.profile_dataset" title="ageas.profile_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">profile_dataset()</span></code></a>). From the
+terminal cells, with their labels, and the progenitor cells’ features
+alone, it measures:</p>
+<ul class="simple">
+<li><p>size and input type: sparsity, non-negativity, whole-number counts;</p></li>
+<li><p>how far the progenitors sit from the mature cells:
+nearest-neighbour distance ratio, coverage, neighbourhood AUC;</p></li>
+<li><p>how cells cluster: progenitors in clusters of their own, purity of
+the mature classes’ clusters;</p></li>
+<li><p>how ambiguous the progenitors look to a linear model of the mature
+classes;</p></li>
+<li><p>how curved the mature classes’ boundary is: linear accuracy, and what
+a nearest-neighbour classifier adds.</p></li>
+</ul>
+</li>
+<li><p><strong>Design the panel</strong> (<a class="reference internal" href="generated/ageas.design_panel.html#ageas.design_panel" title="ageas.design_panel"><code class="xref py py-func docutils literal notranslate"><span class="pre">design_panel()</span></code></a>). Rules stated before
+any run (below) turn the profile into new unit configurations. Every unit
+(<a class="reference internal" href="generated/ageas.UnitSpec.html#ageas.UnitSpec" title="ageas.UnitSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitSpec</span></code></a>) records the rules that shaped it and the ones
+that expect it to validate well or poorly. <a class="reference internal" href="generated/ageas.write_panel.html#ageas.write_panel" title="ageas.write_panel"><code class="xref py py-func docutils literal notranslate"><span class="pre">write_panel()</span></code></a>
+writes the panel as a <a class="reference internal" href="generated/ageas.Hangar.html#ageas.Hangar" title="ageas.Hangar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hangar</span></code></a> config folder.</p></li>
+<li><p><strong>Weight the terminal cells toward the progenitors</strong>
+(<a class="reference internal" href="generated/ageas.shift_weights.html#ageas.shift_weights" title="ageas.shift_weights"><code class="xref py py-func docutils literal notranslate"><span class="pre">shift_weights()</span></code></a>). A terminal cell’s weight is the odds that
+its nearest neighbours, in the cells’ shared principal-component space,
+are progenitors. Weights are scaled to mean 1 and capped at 10, so
+validation favours units that hold up on progenitor-like cells
+(<code class="docutils literal notranslate"><span class="pre">validation='shift'</span></code>). <code class="docutils literal notranslate"><span class="pre">validation='ordinary'</span></code> counts every terminal
+cell alike.</p></li>
+<li><p><strong>Route every unit to its features</strong> (<a class="reference internal" href="generated/ageas.moe_selection.html#ageas.moe_selection" title="ageas.moe_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">moe_selection()</span></code></a>, which
+returns a <a class="reference internal" href="generated/ageas.MoE_Deck.html#ageas.MoE_Deck" title="ageas.MoE_Deck"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoE_Deck</span></code></a>).</p>
+<ul class="simple">
+<li><p>In each fold, every unit trains on all features.</p></li>
+<li><p>Its own attributions (<a class="reference internal" href="generated/ageas.explain_unit.html#ageas.explain_unit" title="ageas.explain_unit"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain_unit()</span></code></a>) rank the features
+(<a class="reference internal" href="generated/ageas.key_features.html#ageas.key_features" title="ageas.key_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">key_features()</span></code></a>).</p></li>
+<li><p>A pruning ladder of attribution mass narrows the unit as far as its
+validation loss stays within <code class="docutils literal notranslate"><span class="pre">relative_delta</span></code> of the all-feature
+version’s, or to the version that validates best
+(<a class="reference internal" href="generated/ageas.search_ladder.html#ageas.search_ladder" title="ageas.search_ladder"><code class="xref py py-func docutils literal notranslate"><span class="pre">search_ladder()</span></code></a>).</p></li>
+<li><p>The chosen version predicts the fold’s held-out cells. Together the
+folds give every unit an out-of-fold record on all terminal cells.</p></li>
+</ul>
+</li>
+<li><p><strong>Follow validation past the rules</strong> (<a class="reference internal" href="generated/ageas.extend_panel.html#ageas.extend_panel" title="ageas.extend_panel"><code class="xref py py-func docutils literal notranslate"><span class="pre">extend_panel()</span></code></a>,
+<code class="docutils literal notranslate"><span class="pre">refine=True</span></code>). Where a family’s best-validated unit sits at the edge
+of the range the rules gave it (C, smoothing, tree depth and rounds,
+network size), a second round trains one more unit past that edge, in the
+same folds.</p></li>
+<li><p><strong>Integrate</strong>, two ways, on the out-of-fold record and under the same
+validation:</p>
+<ul class="simple">
+<li><p><strong>The no-harm mixture</strong> (<a class="reference internal" href="generated/ageas.no_harm_selection.html#ageas.no_harm_selection" title="ageas.no_harm_selection"><code class="xref py py-func docutils literal notranslate"><span class="pre">no_harm_selection()</span></code></a>) adds units
+by greedy forward selection only while they lower the ensemble’s
+log-loss, then drops any it no longer needs.</p></li>
+<li><p><strong>A committee</strong> of competent units (<a class="reference internal" href="generated/ageas.competent_units.html#ageas.competent_units" title="ageas.competent_units"><code class="xref py py-func docutils literal notranslate"><span class="pre">competent_units()</span></code></a>:
+out-of-fold balanced accuracy within <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> of the best) is
+thinned to distinct ones (<a class="reference internal" href="generated/ageas.select_committee.html#ageas.select_committee" title="ageas.select_committee"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_committee()</span></code></a>). It votes
+(<a class="reference internal" href="generated/ageas.vote.html#ageas.vote" title="ageas.vote"><code class="xref py py-func docutils literal notranslate"><span class="pre">vote()</span></code></a>) in log-odds, one voice per model type, and the
+no-harm mixture counts as much as the whole committee.</p></li>
+</ul>
+</li>
+<li><p><strong>Check the strategy</strong> (<a class="reference internal" href="generated/ageas.check_strategy.html#ageas.check_strategy" title="ageas.check_strategy"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_strategy()</span></code></a>). For each rule:
+do the units it favoured validate better than the ones it disfavoured?
+And how well do the rules’ preferences rank the units overall? Reported
+under both validations.</p></li>
+<li><p><strong>Walk through unlabeled cells</strong> (<a class="reference internal" href="generated/ageas.graph_stage.html#ageas.graph_stage" title="ageas.graph_stage"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_stage()</span></code></a>). It runs
+when the data hold at least as many unlabeled cells as progenitors (for
+example, cells between them and the terminal states, as in a time
+course) and there are two terminal classes. Otherwise, the vote is the
+output.</p>
+<ul class="simple">
+<li><p>A random walk over a neighbour graph of every cell, stopped at the
+first terminal cell, gives each progenitor its chance of reaching each
+terminal state (<a class="reference internal" href="generated/ageas.graph_fate.html#ageas.graph_fate" title="ageas.graph_fate"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_fate()</span></code></a>). The graph uses Palantir’s
+defaults: PCA (or LSI for TF-IDF input), 10 multiscale diffusion
+components, 30 neighbours.</p></li>
+<li><p><a class="reference internal" href="generated/ageas.fuse.html#ageas.fuse" title="ageas.fuse"><code class="xref py py-func docutils literal notranslate"><span class="pre">fuse()</span></code></a> ranks the progenitors by 0.6 × the walk’s rank plus
+0.4 × the vote’s. It calls the second class for the share the walk
+gives it on average.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="panel-rules">
+<h2>Panel rules<a class="headerlink" href="#panel-rules" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 45.0%" />
+<col style="width: 33.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Fires when</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">far_progenitors</span></code></p></td>
+<td><p>neighbourhood AUC ≥ 0.9, coverage &lt; 0.5, or half the progenitors in clusters of their own</p></td>
+<td><p>more regularisation, less capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">near_progenitors</span></code></p></td>
+<td><p>AUC &lt; 0.75, coverage ≥ 0.8 and under a fifth in clusters of their own</p></td>
+<td><p>the reverse</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">few_cells</span></code> / <code class="docutils literal notranslate"><span class="pre">many_cells</span></code></p></td>
+<td><p>under 1,000 / at least 5,000 terminal cells</p></td>
+<td><p>less / more capacity; network batch size and epochs follow the cell count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">curved_boundary</span></code></p></td>
+<td><p>a nearest-neighbour classifier adds ≥ 0.03 accuracy, or linear accuracy &lt; 0.9</p></td>
+<td><p>more capacity; flexible variants favoured over linear models</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">straight_boundary</span></code></p></td>
+<td><p>linear accuracy ≥ 0.97 and a flexible model adds &lt; 0.01</p></td>
+<td><p>less capacity; linear models favoured</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">counts</span></code></p></td>
+<td><p>non-negative whole numbers</p></td>
+<td><p>naive Bayes with smoothing 0.1, 1 and 10</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wide</span></code></p></td>
+<td><p>more than twice as many features as cells</p></td>
+<td><p>L1 logistic regression; trees sample 30% of the features</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ambiguous_progenitors</span></code></p></td>
+<td><p>the linear model’s mean scaled entropy on progenitors ≥ 0.5</p></td>
+<td><p>more regularisation</p></td>
+</tr>
+</tbody>
+</table>
+<p>Every panel holds the following units:</p>
+<ul class="simple">
+<li><p>logistic regressions (three C values);</p></li>
+<li><p>a linear SVM (unless cells × features exceeds 10⁸);</p></li>
+<li><p>naive Bayes for non-negative input;</p></li>
+<li><p>three XGBoost variants: the capacity the rules chose, plus fewer,
+shallower trees and more, deeper ones;</p></li>
+<li><p>three MLPs and three ResNets (compact, standard and roomy);</p></li>
+<li><p>a compact recurrent network.</p></li>
+</ul>
+</section>
+<section id="running-it">
+<h2>Running it<a class="headerlink" href="#running-it" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="generated/ageas.run_pipeline.html#ageas.run_pipeline" title="ageas.run_pipeline"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_pipeline()</span></code></a>’s own defaults are simple: for example, the
+committee averages probabilities, and the mixture stays out of the vote. The
+settings the method was benchmarked with are in the repository’s
+<code class="docutils literal notranslate"><span class="pre">revision/v2/protocol.json</span></code>; pass its sections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ageas</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;revision/v2/protocol.json&quot;</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ageas</span><span class="o">.</span><span class="n">run_pipeline</span><span class="p">(</span>
+    <span class="n">terminal_corpus</span><span class="p">,</span>          <span class="c1"># labelled terminal cells, e.g. a Multimodal_Corpus</span>
+    <span class="n">progenitor_x</span><span class="p">,</span>             <span class="c1"># progenitors&#39; model input, (n_cells, ..., n_features), no labels</span>
+    <span class="n">workdir</span><span class="o">=</span><span class="s2">&quot;ageas_v2_run&quot;</span><span class="p">,</span>   <span class="c1"># generated panel configs and Lightning logs</span>
+    <span class="n">selection</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;selection&quot;</span><span class="p">],</span> <span class="n">routing</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;routing&quot;</span><span class="p">],</span>
+    <span class="n">synergy</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;synergy&quot;</span><span class="p">],</span> <span class="n">committee</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;committee&quot;</span><span class="p">],</span>
+    <span class="n">validation</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;validation&quot;</span><span class="p">],</span> <span class="n">refine</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="s2">&quot;refine&quot;</span><span class="p">],</span>
+    <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">graph</span><span class="o">=</span><span class="n">all_cells</span><span class="p">,</span> <span class="n">graph_settings</span><span class="o">=</span><span class="n">protocol</span><span class="p">[</span><span class="s2">&quot;graph&quot;</span><span class="p">],</span>   <span class="c1"># optional, see below</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">all_cells</span></code> turns on the graph stage. It holds every cell under one
+preprocessing:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">features</span></code>: terminal, query and unlabeled cells;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">labels</span></code>: terminal class index, <code class="docutils literal notranslate"><span class="pre">-1</span></code> for the rest;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query_index</span></code>: each progenitor’s row, in <code class="docutils literal notranslate"><span class="pre">progenitor_x</span></code> order;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kind</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;pca&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;lsi&quot;</span></code> for TF-IDF input.</p></li>
+</ul>
+<p>Without it, the committee’s vote is the output.</p>
+<p>The <a class="reference internal" href="generated/ageas.PipelineResult.html#ageas.PipelineResult" title="ageas.PipelineResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineResult</span></code></a> holds:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">query[&quot;final&quot;]</span></code>: the progenitors’ fate probabilities. This is the graph
+stage’s fusion, or the vote. <code class="docutils literal notranslate"><span class="pre">query</span></code> also holds the no-harm mixture
+(<code class="docutils literal notranslate"><span class="pre">no_harm</span></code>), the vote (<code class="docutils literal notranslate"><span class="pre">vote</span></code>) with the committee’s <code class="docutils literal notranslate"><span class="pre">agreement</span></code> and
+<code class="docutils literal notranslate"><span class="pre">disagreement</span></code> per cell, every unit’s probabilities (<code class="docutils literal notranslate"><span class="pre">members</span></code>) and the
+walk (<code class="docutils literal notranslate"><span class="pre">walk</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">profile</span></code>, <code class="docutils literal notranslate"><span class="pre">panel</span></code> and <code class="docutils literal notranslate"><span class="pre">report</span></code>: the data profile, the designed
+units and the strategy check.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deck</span></code>: the <a class="reference internal" href="generated/ageas.MoE_Deck.html#ageas.MoE_Deck" title="ageas.MoE_Deck"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoE_Deck</span></code></a>. It holds the routed experts, the
+out-of-fold record (<code class="docutils literal notranslate"><span class="pre">deck.oof</span></code>), <code class="docutils literal notranslate"><span class="pre">predict</span></code> and <code class="docutils literal notranslate"><span class="pre">debrief</span></code> (per-class
+feature importance).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cell_weights</span></code>, <code class="docutils literal notranslate"><span class="pre">committee</span></code> and <code class="docutils literal notranslate"><span class="pre">graph</span></code>: the shift-aware weights, the
+committee’s members, and the graph stage’s record (whether it ran, and
+why).</p></li>
+</ul>
+</section>
+<section id="protocol">
+<h2>Protocol<a class="headerlink" href="#protocol" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">revision/v2/protocol.json</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">selection</span></code>: 5 folds, 10% validation split, stratified;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">routing</span></code>: ladder at 95%, 80%, 60% and 40% of attribution mass, at
+least 20 features per class; the version that validates best is kept;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">synergy</span></code>: each unit the mixture takes must lower its log-loss by at
+least 1%;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">committee</span></code>:</p>
+<ul>
+<li><p>competence within 0.05 balanced accuracy;</p></li>
+<li><p>near-duplicate members dropped (mean Jensen-Shannon divergence below
+0.01 bits), as are members siding with the rest on under half the
+cells;</p></li>
+<li><p>a log-odds vote with one voice per model type, the mixture joining it;</p></li>
+<li><p>every routed unit refitted on all terminal cells;</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pipeline</span></code>: shift-aware validation, second round on;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">graph</span></code>: at least one unlabeled cell per progenitor, 30 neighbours, 10
+diffusion components, PCA 50, walk weight 0.6.</p></li>
+</ul>
+<p>Its <code class="docutils literal notranslate"><span class="pre">_history</span></code> records each change and the evidence behind it. The scripts
+that benchmarked the method, compared it with baseline methods, and ablated
+its components (reviewer comment R2.4) are in <code class="docutils literal notranslate"><span class="pre">revision/v2</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Keep <code class="docutils literal notranslate"><span class="pre">workdir</span></code> outside synced folders such as Dropbox: every fold writes
+Lightning logs and refitted models there.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples/spatial_example.html" class="btn btn-neutral float-left" title="Spatial Transcriptomics Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

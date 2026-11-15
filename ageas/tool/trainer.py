@@ -51,7 +51,9 @@ class Fake_Trainer:
     flow through the same sortie pipeline as the Lightning-based models.
 
     Attributes:
-        criterion: Cross-entropy loss function.
+        criterion: Negative log-likelihood on log-probabilities. Non-NN
+            models return probabilities rather than logits, so this is the
+            cross-entropy (log-loss) of their predictions.
         result_metrics: Per-batch metric dictionaries collected during
             validation and test.
         accuracy: Multiclass accuracy metric.
@@ -68,12 +70,16 @@ class Fake_Trainer:
             **kwargs: Ignored; accepted for API symmetry with Lightning
                 Trainer.
         """
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.NLLLoss()
         self.result_metrics: list = []
         task = 'multiclass'
         self.accuracy = Accuracy(num_classes=n_classes, task=task)
         self.f1 = F1Score(num_classes=n_classes, task=task, average='macro')
         self.auroc = AUROC(num_classes=n_classes, task=task, average='macro')
+
+    def _log_loss(self, probs: torch.Tensor, label: torch.Tensor) -> torch.Tensor:
+        """Cross-entropy of predicted probabilities (clipped to avoid log 0)."""
+        return self.criterion(torch.log(probs.clamp_min(1e-12)), label.long())
 
     def fit(
         self,
@@ -142,7 +148,7 @@ class Fake_Trainer:
         for data, label in dataloaders:
             preds = torch.Tensor(model.predict(data, label))
             predict_result.append({
-                'vali.CEL': self.criterion(preds, label),
+                'vali.CEL': self._log_loss(preds, label),
                 'vali.accuracy': self.accuracy(preds, label.cpu()),
                 'vali.f1': self.f1(preds, label.cpu()),
                 'vali.auroc': self.auroc(preds, label.cpu()),
@@ -177,7 +183,7 @@ class Fake_Trainer:
         for data, label in dataloaders:
             preds = torch.Tensor(model.predict(data, label))
             result = {
-                'test.CEL': self.criterion(preds, label),
+                'test.CEL': self._log_loss(preds, label),
                 'test.accuracy': self.accuracy(preds, label.cpu()),
                 'test.f1': self.f1(preds, label.cpu()),
                 'test.auroc': self.auroc(preds, label.cpu()),

@@ -12,6 +12,13 @@ n-iteration k-fold cross-validation, retains the strongest units, and
 aggregates per-class explanations (Integrated Gradients, SHAP, or model
 coefficients) into a unified factor importance table.
 
+Since version 0.1, Ageas also offers a label-free, feature-routed pipeline
+(Ageas v2, :func:`~ageas.run_pipeline`). It designs the panel for each
+dataset from a profile of the data, and narrows every unit to the features
+it relies on. It integrates only the units that help each other: a no-harm
+mixture and the vote of a committee of competent, distinct units. See
+:ref:`v2`.
+
 .. note::
 
    This project is under active development.
@@ -34,6 +41,19 @@ Key Features
 * **Unified Explanation Pipeline:** :meth:`~ageas.Deck.debrief` weights
   per-unit explanations by their validation/test metrics and produces a
   single integrated importance table across the squad.
+* **Label-Free Panel Design (v2):** :func:`~ageas.profile_dataset` and
+  :func:`~ageas.design_panel` derive each dataset's panel from rules stated
+  before any run. :func:`~ageas.shift_weights` steers validation toward
+  progenitor-like terminal cells; no step uses progenitor labels.
+* **Feature Routing and No-Harm Integration (v2):**
+  :func:`~ageas.moe_selection` narrows every unit to the features its own
+  attributions rank highest, as far as validation allows. It integrates units
+  only when they lower the ensemble's out-of-fold loss
+  (:func:`~ageas.no_harm_selection`), next to a committee vote
+  (:func:`~ageas.vote`).
+* **Graph Stage (v2):** where unlabeled intermediate cells exist,
+  :func:`~ageas.graph_stage` fuses the vote with a random walk through
+  them toward the terminal states.
 
 Citation
 --------
@@ -57,4 +77,5 @@ Contents
 
    Installation <installation>
    Examples <examples>
+   Feature-Routed Pipeline (v2) <v2>
    API Reference <api>

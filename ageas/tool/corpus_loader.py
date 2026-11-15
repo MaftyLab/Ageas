@@ -296,7 +296,7 @@ class Multimodal_Corpus(Dataset):
             assert actual_label == self.label_dict[class_label], \
                 "Inconsistent class_label and actual_label"
 
-        return self.__class__(
+        new_ds = self.__class__(
             adata_path=self.adata_path,
             adata=self.adata[
                 self.adata.obs[self.label_key] == actual_label
@@ -308,6 +308,11 @@ class Multimodal_Corpus(Dataset):
             backed=self.adata_backed,
             dtype=self.dtype,
         )
+        # Subsetting drops unused categories, which would re-encode the
+        # labels; keep the parent's mapping so cells keep their class index.
+        new_ds.label_dict = self.label_dict.copy()
+        new_ds.reverse_label_dict = self.reverse_label_dict.copy()
+        return new_ds
 
     def copy(self) -> 'Multimodal_Corpus':
         """Return a deep copy of the dataset instance.

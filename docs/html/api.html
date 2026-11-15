@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ageas.Hangar" href="generated/ageas.Hangar.html" />
-    <link rel="prev" title="Spatial Transcriptomics Analysis" href="examples/spatial_example.html" /> 
+    <link rel="prev" title="Feature-routed pipeline (Ageas v2)" href="v2.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,6 +48,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v2.html">Feature-Routed Pipeline (v2)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#core-objects">Core Objects</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/ageas.Hangar.html">ageas.Hangar</a></li>
@@ -59,6 +60,39 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/ageas.n_kfold_selection.html">ageas.n_kfold_selection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/ageas.n_iter_boost_selection.html">ageas.n_iter_boost_selection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/ageas.n_iter_extraction.html">ageas.n_iter_extraction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-routed-pipeline-v2">Feature-Routed Pipeline (v2)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.run_pipeline.html">ageas.run_pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.PipelineResult.html">ageas.PipelineResult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.moe_selection.html">ageas.moe_selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.MoE_Deck.html">ageas.MoE_Deck</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-profile-and-panel-design-v2">Data Profile and Panel Design (v2)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.profile_dataset.html">ageas.profile_dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.design_panel.html">ageas.design_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.extend_panel.html">ageas.extend_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.write_panel.html">ageas.write_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.UnitSpec.html">ageas.UnitSpec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.check_strategy.html">ageas.check_strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#validation-routing-and-integration-v2">Validation, Routing and Integration (v2)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.shift_weights.html">ageas.shift_weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.explain_unit.html">ageas.explain_unit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.key_features.html">ageas.key_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.search_ladder.html">ageas.search_ladder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.no_harm_selection.html">ageas.no_harm_selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.competent_units.html">ageas.competent_units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.select_committee.html">ageas.select_committee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.vote.html">ageas.vote</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-stage-v2">Graph Stage (v2)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.graph_stage.html">ageas.graph_stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.graph_fate.html">ageas.graph_fate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/ageas.fuse.html">ageas.fuse</a></li>
 </ul>
 </li>
 </ul>
@@ -125,13 +159,105 @@ and functions in the <strong>Ageas</strong> package.</p>
 </tbody>
 </table>
 </section>
+<section id="feature-routed-pipeline-v2">
+<h2>Feature-Routed Pipeline (v2)<a class="headerlink" href="#feature-routed-pipeline-v2" title="Link to this heading"></a></h2>
+<p>The label-free workflow (see <a class="reference internal" href="v2.html#v2"><span class="std std-ref">Feature-routed pipeline (Ageas v2)</span></a>) and the objects it returns.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.run_pipeline.html#ageas.run_pipeline" title="ageas.run_pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.run_pipeline</span></code></a>(terminal_dataset, ...[, ...])</p></td>
+<td><p>Run Ageas v2 on one dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.PipelineResult.html#ageas.PipelineResult" title="ageas.PipelineResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.PipelineResult</span></code></a>(deck, profile, panel, ...)</p></td>
+<td><p>Everything one pipeline run produced.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.moe_selection.html#ageas.moe_selection" title="ageas.moe_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.moe_selection</span></code></a>(hangar[, query_dataset, ...])</p></td>
+<td><p>Route every unit to its key features and integrate the ones that help each other.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.MoE_Deck.html#ageas.MoE_Deck" title="ageas.MoE_Deck"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.MoE_Deck</span></code></a>(experts, weights, oof, features)</p></td>
+<td><p>Integrated experts of an Ageas v2 run.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data-profile-and-panel-design-v2">
+<h2>Data Profile and Panel Design (v2)<a class="headerlink" href="#data-profile-and-panel-design-v2" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.profile_dataset.html#ageas.profile_dataset" title="ageas.profile_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.profile_dataset</span></code></a>(terminal_x, ...[, ...])</p></td>
+<td><p>Label-free profile of one dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.design_panel.html#ageas.design_panel" title="ageas.design_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.design_panel</span></code></a>(profile[, use_rules])</p></td>
+<td><p>The units a dataset's profile calls for.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.extend_panel.html#ageas.extend_panel" title="ageas.extend_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.extend_panel</span></code></a>(panel, losses)</p></td>
+<td><p>Units one step past the edge of a range where validation prefers that edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.write_panel.html#ageas.write_panel" title="ageas.write_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.write_panel</span></code></a>(panel, folder)</p></td>
+<td><p>Write <code class="docutils literal notranslate"><span class="pre">panel</span></code> as an Ageas config folder; returns its path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.UnitSpec.html#ageas.UnitSpec" title="ageas.UnitSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.UnitSpec</span></code></a>(name, type, config, ...)</p></td>
+<td><p>One generated unit of the panel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.check_strategy.html#ageas.check_strategy" title="ageas.check_strategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.check_strategy</span></code></a>(panel, oof_probs, labels)</p></td>
+<td><p>Whether validation bears out what each panel rule expected.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="validation-routing-and-integration-v2">
+<h2>Validation, Routing and Integration (v2)<a class="headerlink" href="#validation-routing-and-integration-v2" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.shift_weights.html#ageas.shift_weights" title="ageas.shift_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.shift_weights</span></code></a>(terminal_x, query_x[, ...])</p></td>
+<td><p>Weight of every terminal cell for shift-aware validation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.explain_unit.html#ageas.explain_unit" title="ageas.explain_unit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.explain_unit</span></code></a>(model, unit_type, dataset)</p></td>
+<td><p>Per-class, class-contrastive attribution of one trained unit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.key_features.html#ageas.key_features" title="ageas.key_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.key_features</span></code></a>(attribution, mass[, floor])</p></td>
+<td><p>Features a unit relies on at one pruning level.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.search_ladder.html#ageas.search_ladder" title="ageas.search_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.search_ladder</span></code></a>(levels, full_score, ...)</p></td>
+<td><p>Pruning level of a unit, searched down the ladder.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.no_harm_selection.html#ageas.no_harm_selection" title="ageas.no_harm_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.no_harm_selection</span></code></a>(oof_probs, labels[, ...])</p></td>
+<td><p>Weights of the units that improve the ensemble's OOF log-loss.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.competent_units.html#ageas.competent_units" title="ageas.competent_units"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.competent_units</span></code></a>(oof_probs, labels[, ...])</p></td>
+<td><p>Units whose out-of-fold balanced accuracy is within <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> of the best unit's.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.select_committee.html#ageas.select_committee" title="ageas.select_committee"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.select_committee</span></code></a>(query_probs, ranked)</p></td>
+<td><p>The committee drawn from <code class="docutils literal notranslate"><span class="pre">ranked</span></code> units, judged on their query probabilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.vote.html#ageas.vote" title="ageas.vote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.vote</span></code></a>(member_probs[, rule, groups, mixture])</p></td>
+<td><p>Equal-weight soft vote of the members' class probabilities.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="graph-stage-v2">
+<h2>Graph Stage (v2)<a class="headerlink" href="#graph-stage-v2" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.graph_stage.html#ageas.graph_stage" title="ageas.graph_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.graph_stage</span></code></a>(vote, features, labels, ...)</p></td>
+<td><p>Fuse the walk into the vote when the data allows it; otherwise pass the vote through.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/ageas.graph_fate.html#ageas.graph_fate" title="ageas.graph_fate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.graph_fate</span></code></a>(features, labels[, kind, ...])</p></td>
+<td><p>Absorption probabilities of every cell over the diffusion-space neighbour graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/ageas.fuse.html#ageas.fuse" title="ageas.fuse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ageas.fuse</span></code></a>(vote, walk[, weight])</p></td>
+<td><p>Two-class probabilities from the vote and the walk.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="examples/spatial_example.html" class="btn btn-neutral float-left" title="Spatial Transcriptomics Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="v2.html" class="btn btn-neutral float-left" title="Feature-routed pipeline (Ageas v2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="generated/ageas.Hangar.html" class="btn btn-neutral float-right" title="ageas.Hangar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

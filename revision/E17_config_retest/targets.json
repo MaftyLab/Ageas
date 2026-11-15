@@ -1,0 +1,32 @@
+{
+  "_comment": "Ageas metrics reported in the manuscript (Ageas.manuscript/sn-article.tex and Supplementary Table 2). A configuration is 'no worse than published' when every listed metric is at least the reported value. The manuscript calls its F1 'macro F1'. For iEP ATAC the reported F1 (.783) exceeds the reported accuracy (.736), which a two-class macro F1 cannot do, so score.py also reports weighted F1. Registry entries with a suffix (_hvg2000, _published) use the targets of their base name. For axolotl, docs/examples/spatial_example.ipynb min-max rescaled the probabilities before plotting, so score.py checks the description on raw and on rescaled probabilities.",
+  "iep_rna": {
+    "accuracy": 0.873,
+    "f1_macro": 0.870,
+    "auroc": 0.88,
+    "source": "sn-article.tex lines 298-300; Supplementary Table 2"
+  },
+  "larry_bench": {
+    "accuracy": 0.790,
+    "f1_macro": 0.765,
+    "auroc": 0.882,
+    "source": "sn-article.tex lines 328-329 (Supplementary Table 2 gives accuracy 0.789)"
+  },
+  "iep_atac_peak": {
+    "accuracy": 0.736,
+    "f1_macro": 0.783,
+    "auroc": 0.909,
+    "source": "sn-article.tex line 386; Supplementary Table 2"
+  },
+  "zheng68k": {
+    "accuracy": 0.828,
+    "f1_macro": 0.716,
+    "aggregate": "median over the 5 cross-validation folds",
+    "source": "sn-article.tex lines 271-276 (median 5-CV accuracy and macro F1); Supplementary Table 1"
+  },
+  "axolotl_d15": {
+    "ventral_max": 0.3,
+    "dorsal_min": 0.8,
+    "source": "sn-article.tex line 488: P(Lineage-2) rises from 0.0-0.3 ventrally to above 0.8 dorsally. Scored as the mean P(Lineage-2) of the most ventral and most dorsal fifth of reaEGCs along the README's dorsal axis (MSN centroid to dpEX centroid)."
+  }
+}

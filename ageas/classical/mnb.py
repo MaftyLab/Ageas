@@ -11,7 +11,7 @@ import pytorch_lightning as pl
 from sklearn.naive_bayes import MultinomialNB
 
 import ageas.tool.JSON as JSON
-from ageas.tool import l1_normalize
+from ageas.tool import class_contrast, l1_normalize, to_2d_numpy
 
 
 class MNB_Classifier(pl.LightningModule):
@@ -68,7 +68,7 @@ class MNB_Classifier(pl.LightningModule):
             y: Label tensor.
         """
         self.model.partial_fit(
-            np.array(x.squeeze()),
+            to_2d_numpy(x),
             np.array(y),
             classes=list(range(self.hparams.model_params['num_class'])),
         )
@@ -83,13 +83,14 @@ class MNB_Classifier(pl.LightningModule):
         Returns:
             Probability matrix of shape ``(batch, num_class)``.
         """
-        return self.model.predict_proba(np.array(x.squeeze()))
+        return self.model.predict_proba(to_2d_numpy(x))
 
     def explain(self, score_name: str = 'Scores', **kwargs) -> pd.DataFrame:
         """Class-contrastive feature importance from ``feature_log_prob_``.
 
-        Computes a per-feature contribution magnitude, subtracts the
-        cross-class background (max over the other classes), and
+        For each class, subtracts the maximum log-probability of the other
+        classes from the class's own feature log-probabilities (positive
+        values mark features relatively more likely under that class) and
         L1-normalises the result per class.
 
         Args:
@@ -100,23 +101,19 @@ class MNB_Classifier(pl.LightningModule):
             Score table indexed by feature with columns
             ``Class_{i}_Scores``.
         """
-        # Shape: (n_features, n_classes)
-        ans = self.model.feature_log_prob_.T
+        log_prob = np.asarray(self.model.feature_log_prob_, dtype=float)
+        scores = np.zeros((self.hparams.model_params['num_class'], log_prob.shape[1]))
+        for row, c in zip(log_prob, self.model.classes_):
+            scores[int(c)] = row
 
-        contribution = np.mean(np.abs(ans), axis=0)
-        contribution /= np.sum(contribution)
-
-        backgrounds = np.zeros_like(ans)
-        for ind in range(len(ans)):
-            backgrounds[ind] = np.max(np.delete(ans, ind, axis=0), axis=0)
-
-        for ind, exp in enumerate(ans):
-            ans[ind] = l1_normalize((exp - backgrounds[ind]) * contribution)
+        ans = np.array([
+            l1_normalize(row, mode='numpy') for row in class_contrast(scores)
+        ])
 
         return pd.DataFrame(
-            ans,
+            ans.T,
             index=self.hparams.fea_names,
-            columns=[f'Class_{i}_Scores' for i in range(ans.shape[1])],
+            columns=[f'Class_{i}_Scores' for i in range(ans.shape[0])],
         )
 
     def save_model(self, path: str) -> None:

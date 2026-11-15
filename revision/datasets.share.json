@@ -1,0 +1,120 @@
+{
+  "_comment": "Registry for the benchmark objects in Ageas.share/data (described in data/README.md). Paths are relative to the repository root, so this file works wherever Ageas.share is synced, or wherever data/ sits next to the repository. Entries without a suffix follow the README feature recipe (genes detected in at least 1% of the cells of the object); '_hvg2000' entries follow the manuscript Methods (2,000 highly variable genes). Ground truth is the README's: obs['lineage'] for the iEP query cells, obs['truth'] for the LARRY query cells, none for axolotl.",
+  "iep_rna": {
+    "h5ad": "../data/celltag/celltag_multi_rna.h5ad",
+    "modality": "rna",
+    "label_key": "celltype",
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "min_detect_frac": 0.01},
+    "ground_truth": {"type": "obs_label", "key": "lineage"},
+    "time_key": "time_info",
+    "embedding_obsm": "X_scVI"
+  },
+  "iep_rna_published": {
+    "_note": "Training labels as in the deleted Ageas.scripts/celltag_multi/celltag.py: the clone-derived lineage of day-21 cells. obs['md_fate_rev1'] holds lineage x day, so label_map keeps day 21 for training and day 3 as the query; day-12 cells are left out. Truth and features as in iep_rna.",
+    "h5ad": "../data/celltag/celltag_multi_rna.h5ad",
+    "modality": "rna",
+    "label_key": "md_fate_rev1",
+    "label_map": {"Day21 dead-end": "dead-end", "Day21 reprogramming": "reprogramming",
+                  "Day3 dead-end": "early", "Day3 reprogramming": "early"},
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": {"scope": "object", "normalize_total": true, "target_sum": 10000, "log1p": true, "min_detect_frac": 0.01},
+    "ground_truth": {"type": "obs_label", "key": "lineage"},
+    "time_key": "time_info"
+  },
+  "iep_rna_hvg2000": {
+    "h5ad": "../data/celltag/celltag_multi_rna.h5ad",
+    "modality": "rna",
+    "label_key": "celltype",
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat"},
+    "ground_truth": {"type": "obs_label", "key": "lineage"},
+    "time_key": "time_info",
+    "embedding_obsm": "X_scVI"
+  },
+  "iep_atac_peak": {
+    "h5ad": "../data/celltag/atac_peaks_top50k.h5ad",
+    "modality": "atac_peak",
+    "label_key": "celltype",
+    "label_map": {"de": "dead-end", "rep": "reprogramming"},
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": {"tfidf": true, "scale_factor": 10000},
+    "ground_truth": {"type": "obs_label", "key": "lineage"}
+  },
+  "larry_bench": {
+    "h5ad": "../data/larry/larry_bench.h5ad",
+    "modality": "rna",
+    "label_key": "bench_group",
+    "terminal_classes": ["Monocyte", "Neutrophil"],
+    "query_values": ["query"],
+    "preprocess": {"min_detect_frac": 0.01},
+    "ground_truth": {"type": "obs_label", "key": "truth"},
+    "time_key": "Time.point",
+    "embedding_obsm": "X_pca"
+  },
+  "larry_bench_hvg2000": {
+    "h5ad": "../data/larry/larry_bench.h5ad",
+    "modality": "rna",
+    "label_key": "bench_group",
+    "terminal_classes": ["Monocyte", "Neutrophil"],
+    "query_values": ["query"],
+    "preprocess": {"n_hvg": 2000, "hvg_flavor": "seurat"},
+    "ground_truth": {"type": "obs_label", "key": "truth"},
+    "time_key": "Time.point",
+    "embedding_obsm": "X_pca"
+  },
+  "axolotl_d15": {
+    "h5ad": "../data/spatial/axolotl_d15.h5ad",
+    "modality": "spatial_rna",
+    "label_key": "cluster",
+    "label_map": {"rIPC1": "Lineage-1", "IMN": "Lineage-1", "nptxEX": "Lineage-1", "rIPC2": "Lineage-2", "dpEX": "Lineage-2"},
+    "terminal_classes": ["Lineage-1", "Lineage-2"],
+    "query_values": ["reaEGC"],
+    "preprocess": {"scope": "object", "normalize_total": true, "target_sum": 10000, "log1p": true, "min_detect_frac": 0.01},
+    "ground_truth": null,
+    "spatial_obsm": "spatial",
+    "dorsal_axis": {"from_state": "MSN", "to_state": "dpEX"}
+  },
+  "zheng68k_hvg2000": {
+    "_note": "Classification benchmark (Supplementary Table 1). Not in Ageas.share: the object is Dropbox/celltagmulti/anno/LiuBIB_5_Zheng68K(PBMC)_FACS_label.h5ad, copied into data/zheng68k/. The cv block makes E17 hold out one stratified fold at a time (run_configs.py --fold k); all 11 cell types are training classes. Methods recipe: 1e4 + log1p, 2,000 highly variable genes chosen on all cells (label-free).",
+    "h5ad": "../data/zheng68k/LiuBIB_5_Zheng68K(PBMC)_FACS_label.h5ad",
+    "modality": "rna",
+    "label_key": "celltype",
+    "terminal_classes": ["CD8+/CD45RA+ Naive Cytotoxic", "CD4+/CD25 T Reg", "CD8+ Cytotoxic T", "CD56+ NK", "CD19+ B",
+                         "CD14+ Monocyte", "CD4+/CD45RO+ Memory", "CD4+/CD45RA+/CD25- Naive T", "Dendritic", "CD34+",
+                         "CD4+ T Helper2"],
+    "query_values": [],
+    "preprocess": {"scope": "object", "normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat"},
+    "ground_truth": null,
+    "cv": {"n_folds": 5, "seed": 0}
+  },
+  "axolotl_d15_published": {
+    "_note": "Replicates docs/examples/spatial_example.ipynb, which made the manuscript's axolotl figure: rIPC1 vs rIPC2 as training classes, raw counts without normalisation, 2,000 seurat_v3 genes chosen on the six lineage clusters (the extra kept clusters take part in gene selection only).",
+    "h5ad": "../data/spatial/axolotl_d15.h5ad",
+    "modality": "spatial_rna",
+    "label_key": "cluster",
+    "terminal_classes": ["rIPC1", "rIPC2"],
+    "query_values": ["reaEGC"],
+    "extra_keep_values": ["dpEX", "nptxEX", "IMN"],
+    "preprocess": {"n_hvg": 2000, "hvg_flavor": "seurat_v3"},
+    "ground_truth": null,
+    "spatial_obsm": "spatial",
+    "dorsal_axis": {"from_state": "MSN", "to_state": "dpEX"}
+  },
+  "axolotl_d15_hvg2000": {
+    "h5ad": "../data/spatial/axolotl_d15.h5ad",
+    "modality": "spatial_rna",
+    "label_key": "cluster",
+    "label_map": {"rIPC1": "Lineage-1", "IMN": "Lineage-1", "nptxEX": "Lineage-1", "rIPC2": "Lineage-2", "dpEX": "Lineage-2"},
+    "terminal_classes": ["Lineage-1", "Lineage-2"],
+    "query_values": ["reaEGC"],
+    "preprocess": {"scope": "object", "normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat"},
+    "ground_truth": null,
+    "spatial_obsm": "spatial",
+    "dorsal_axis": {"from_state": "MSN", "to_state": "dpEX"}
+  }
+}

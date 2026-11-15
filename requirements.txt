@@ -5,6 +5,7 @@ pytorch-lightning >= 2.2.0
 torchmetrics >= 1.6.1
 xgboost >= 2.0.3
 scikit-learn == 1.5.1
+scipy >= 1.11
 imbalanced-learn >= 0.13.0
 numpy >= 1.26.4
 pandas >= 2.2.2

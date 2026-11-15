@@ -1,0 +1,95 @@
+{
+  "_schema": {
+    "h5ad": "Path to the AnnData file (raw or preprocessed; see preprocess).",
+    "modality": "rna | atac_peak | tf_activity | spatial_rna",
+    "label_key": "obs column with cell states (terminal classes and the query state).",
+    "terminal_classes": "Terminal states used for training, in a fixed order.",
+    "query_values": "States of the query progenitors whose fate is predicted.",
+    "extra_keep_values": "Optional: other states kept in adata (e.g. other fates for E13 open-set tests).",
+    "preprocess": "null if X is already processed; otherwise {normalize_total, target_sum, log1p, n_hvg, hvg_flavor, layer}.",
+    "ground_truth": "null | {type: clone_matrix, clone_obsm, state_key, time_key, fates, pure_threshold} | {type: obs_label, key, mapping} | {type: csv, path}",
+    "time_key": "obs column with real sampling times (used only by the E02 time-aware oracle and E14).",
+    "position_key": "obs column with an axial coordinate (e.g. A-P slice index; E10).",
+    "spatial_obsm": "obsm key with in-section spatial coordinates (E10, E14).",
+    "embedding_obsm": "Optional obsm key of an existing embedding (PCA/LSI/scVI) for baselines.",
+    "counts_metadata": "Optional obs columns with technical covariates, e.g. [total_counts, n_genes_by_counts] (E10)."
+  },
+  "synthetic": {
+    "h5ad": "revision/results/synthetic/synthetic.h5ad",
+    "modality": "rna",
+    "label_key": "state",
+    "terminal_classes": ["A", "B"],
+    "query_values": ["progenitor"],
+    "extra_keep_values": ["C"],
+    "preprocess": null,
+    "ground_truth": {"type": "clone_matrix", "clone_obsm": "X_clone", "state_key": "state", "time_key": "day", "fates": ["A", "B"]},
+    "time_key": "day",
+    "position_key": "slice",
+    "spatial_obsm": "spatial",
+    "counts_metadata": ["total_counts"]
+  },
+  "larry": {
+    "h5ad": "/data/jiangjunyao/public/cospar data/LARRY_adata_preprocessed.h5ad",
+    "modality": "rna",
+    "label_key": "state_info",
+    "terminal_classes": ["Monocyte", "Neutrophil"],
+    "query_values": ["undiff"],
+    "extra_keep_values": ["Baso", "Mast", "Meg", "Erythroid", "Eos", "Lymphoid", "pDC", "Ccr7_DC"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat"},
+    "ground_truth": {"type": "clone_matrix", "clone_obsm": "X_clone", "state_key": "state_info", "time_key": "time_info", "fates": ["Monocyte", "Neutrophil"]},
+    "time_key": "time_info",
+    "embedding_obsm": "X_pca"
+  },
+  "iep_rna": {
+    "h5ad": "/data/jiangjunyao/easyGRN/processed_data/celltag_multi_iep.prcessed.h5ad",
+    "modality": "rna",
+    "label_key": "celltype",
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat_v3"},
+    "ground_truth": {"type": "obs_label", "key": "state_info", "mapping": {"FILL_ME_early_dead_label": "dead-end", "FILL_ME_early_repr_label": "reprogramming"}},
+    "embedding_obsm": "X_scVI"
+  },
+  "iep_atac_peak": {
+    "h5ad": "FILL_ME/celltag_multi_atac_peaks_tfidf_top50k.h5ad",
+    "modality": "atac_peak",
+    "label_key": "celltype",
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": null,
+    "ground_truth": {"type": "obs_label", "key": "state_info", "mapping": {"FILL_ME_early_dead_label": "dead-end", "FILL_ME_early_repr_label": "reprogramming"}},
+    "embedding_obsm": "X_lsi"
+  },
+  "iep_atac_tf": {
+    "h5ad": "FILL_ME/celltag_multi_chromvar_deviations.h5ad",
+    "modality": "tf_activity",
+    "label_key": "celltype",
+    "terminal_classes": ["dead-end", "reprogramming"],
+    "query_values": ["early"],
+    "preprocess": null,
+    "ground_truth": {"type": "obs_label", "key": "state_info", "mapping": {"FILL_ME_early_dead_label": "dead-end", "FILL_ME_early_repr_label": "reprogramming"}}
+  },
+  "axolotl_d15": {
+    "h5ad": "FILL_ME/axolotl_D15_stereoseq.h5ad",
+    "modality": "spatial_rna",
+    "label_key": "cluster",
+    "terminal_classes": ["FILL_ME: e.g. rIPC1 + nptxEX + IMN merged as lineage1", "lineage2"],
+    "query_values": ["reaEGC"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat_v3"},
+    "ground_truth": null,
+    "spatial_obsm": "spatial",
+    "_note": "Decide (and state in Methods) whether training classes are the terminal neurons or rIPC1 vs rIPC2; the spatial example notebook trained on rIPC1 vs rIPC2."
+  },
+  "cs8_embryo": {
+    "h5ad": "FILL_ME/CS8_3D_stereoseq.h5ad",
+    "modality": "spatial_rna",
+    "label_key": "celltype",
+    "terminal_classes": ["Ecto", "PS"],
+    "query_values": ["Epi"],
+    "preprocess": {"normalize_total": true, "target_sum": 10000, "log1p": true, "n_hvg": 2000, "hvg_flavor": "seurat_v3"},
+    "ground_truth": null,
+    "position_key": "slice",
+    "spatial_obsm": "spatial",
+    "counts_metadata": ["total_counts", "n_genes_by_counts"]
+  }
+}

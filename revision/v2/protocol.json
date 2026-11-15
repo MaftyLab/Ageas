@@ -1,0 +1,54 @@
+{
+  "_comment": "Ageas v2 protocol: the label-free pipeline. Each run profiles its own dataset without progenitor labels, designs its panel from that profile, routes every unit to the features that help it, and integrates the units two ways: the no-harm mixture, and the vote of a committee of competent, distinct units. When the data holds unlabeled cells between the progenitors and the terminal states, a graph stage walks through them and fuses the walk into the vote. Validation is shift-aware (terminal cells weighted toward the progenitors). The pipeline never reads query labels when it runs. Selection values mirror Ageas/revision/protocol.json, so v2 and R1 runs with the same seed see the same folds. Since 2026-11-15 the code is part of the ageas package (ageas.run_pipeline) and this file is revision/v2/protocol.json; module paths in _history name the former Ageas.v2 layout (e.g. ageas_v2/graph.py is now ageas/tool/graph.py).",
+  "_history": [
+    "2026-11-05: first version. Routing and synergy values carry over from the retired first v2, whose relative thresholds were set from terminal-cell losses only. Same night, before any run was scored: trees and networks got three variants each, and a second round (refine) adds one unit past a family's edge when validation prefers that edge.",
+    "2026-11-07: the first benchmark was scored once. v2 was more accurate than R1 on most LARRY and iEP setups but worse calibrated, and not clearly better.",
+    "2026-11-08: the committee vote was added beside the no-harm mixture (competence within 2 points of the best unit's balanced accuracy; units under 0.01 bits apart count once; a unit siding with the rest on under half the query cells is dropped). The 0.01-bit threshold came from R1 units' probabilities on LARRY and iEP progenitors (no labels). From here the user chose to refine v2 against all evaluation labels (LARRY and iEP progenitor fates, Zheng68K held-out cell types) until it beats R1 on accuracy, macro F1 and AUROC, so scores of later versions are optimistic. One run per setup (seed 0; Zheng68K's 5 folds once).",
+    "2026-11-08, round 2 (from round 1's LARRY and iEP labels): the vote averages log-odds (on LARRY it beat R1 on all three metrics where the plain average did not; on iEP the two were within 0.003 AUROC); every routed unit is refitted, so committees can be compared afterwards; and every panel carries three light networks on R1's recipe (a wide-latent MLP and two GRUs, one epoch at batch 200), the kinds that ranked progenitors best among R1's units.",
+    "2026-11-08, round 3 (from round 2's LARRY and iEP labels, computed on round 2's saved predictions): competence is within 5 points of the best unit (2 points shut out the light networks, iEP's best progenitor rankers), and every model type gets one voice in the vote (ResNets, iEP's weakest rankers, had held 4 of 10 seats). On round 2's runs this gave LARRY .792/.786/.894 and iEP .850/.796/.860 (accuracy/macro F1/AUROC) against R1's means of .766/.753/.889 and .852/.793/.855.",
+    "2026-11-08, round 4 (from round 1's Zheng68K fold 0, labels used): routing keeps each unit's best-validated version (ladder_choice 'best'; the 10% tolerance now only bounds the search). Round 1's rule kept the strongest pruning within 10% of the all-feature loss: on Zheng68K nearly every pruning cost validation loss, and its units fell 1 to 3 points of held-out accuracy below R1's all-gene logistic regression (.848 to .871 against .883). On LARRY and iEP pruning mostly lowered validation loss, so most of their routing stays.",
+    "2026-11-08, round 5 (from round 4's LARRY, iEP and Zheng68K fold 0 labels, computed on round 4's saved predictions): the no-harm mixture joins the vote with as much weight as the whole committee (with_mixture). On round 4's runs the vote alone missed R1's iEP accuracy by 0.001 and the mixture alone missed R1's LARRY AUROC by 0.004; averaged in log-odds they beat R1 on accuracy, macro F1 and AUROC on all three (LARRY .791/.785/.892, iEP .855/.800/.860, Zheng68K fold 0 .889/.790/.992; R1 .766/.753/.889, .852/.793/.855, .883/.781/.984). Of 48 committee rules tried (competence within 2, 5 or 10 points or any; plain or log-odds average; one voice per unit or per type; the mixture absent, one more voter, or half), this one had the largest smallest gain over R1 (+0.003).",
+    "2026-11-09, round 5 checked on every loop setup (labels used, so optimistic): fresh runs of this protocol gave the vote LARRY .7937/.7877/.8921 and iEP .8586/.8058/.8612 (accuracy/macro F1/AUROC) against R1's means of .7659/.7533/.8885 and .8517/.7934/.8549; on Zheng68K, round 4's five held-out folds scored under this rule (it only recombines saved predictions) gave .8879/.7894/.9866 against R1's .8838/.7855/.9774, ahead in 14 of 15 fold-and-metric pairs (fold 4's macro F1 was 0.0011 behind). The vote alone missed R1's Zheng68K macro F1 by 0.0004 and the mixture alone missed R1's LARRY AUROC by 0.005. ResNet units do not reproduce exactly between runs (GPU); the other units do.",
+    "2026-11-09, round 5 tested on the 130 simulated datasets (data/simulation: 90 RNA and 40 ATAC, 13 scenarios x 10 simulation seeds; never used to build or refine v2, so a clean test; one run per method, seed 0): the vote trailed R1 on accuracy (.597 against .605; ahead on 48 datasets, behind on 81; Wilcoxon p .003) and AUROC (.640 against .647; 44/86; p < .001), with macro F1 level (.546 against .547; p .4). RNA was behind on accuracy and AUROC, ATAC level, the held-out seeds 6-10 alike; no scenario was ahead on all three metrics and none differed after Holm correction. Diagnosis (labels used): v2's best unit matched R1's best (AUROC .677 against .674 on RNA), and a plain average of all its units roughly tied R1 on RNA (.661 against .660) but not on ATAC (.610 against .620). The no-harm mixture was naive Bayes alone in 107 of 130 runs: it gives most progenitors over 0.99 (70% on RNA, 97% on ATAC), so it has the lowest terminal log-loss and wins forward selection, yet ranks progenitors below the linear units, and with_mixture gives it half the vote. Every dataset fired the same rules (far, few, straight; ambiguous on 125; wide on ATAC). v2 took a median 50 min per dataset against R1's 3.7.",
+    "2026-11-11: the graph stage (ageas_v2/graph.py) was added, designed on the simulated datasets' development seeds 1-5 only (their labels used, as the simulation README allows; seeds 6-10 held out for the test). The user's targets: on the held-out seeds, mean AUROC, accuracy and macro F1 each within 0.01 of the best baseline method's on that metric (test.result/simulation_benchmark), for RNA and for ATAC, with no metric lower on the real datasets. When a dataset holds at least as many unlabeled cells as query cells (the simulated datasets' trunk and branch context; the real datasets hold none), a random walk over a neighbour graph of every cell gives each progenitor its absorption probabilities (Palantir's defaults: PCA 50 of z-scored features, LSI for TF-IDF input; 10 multiscale diffusion components; adaptive Gaussian kernel over 30 neighbours). The output ranks the progenitors by 0.6 x the walk's rank + 0.4 x the vote's and calls the second class for the share the walk gives it on average. Chosen from 2 embeddings (PCA, diffusion) x 6 weights (0.4-0.8) x 4 share rules (the vote's calls, the vote's mean, the walk's mean, their average) as the setting with the largest smallest margin over the best baseline on any metric and modality. In the spike on seeds 1-5 it gave RNA .702/.627/.591 (AUROC/accuracy/macro F1; best baselines .695/.618/.579) and ATAC .632/.585/.559 (.627/.574/.527), against the vote's .655/.603/.572 and .632/.551/.496. The walk alone ranks RNA progenitors well (AUROC .706) but calls them poorly (macro F1 .41), and does not help ATAC (.589). Without unlabeled cells every graph variant lowered some real-data metric, hence the gate: on the real datasets the output is the vote, unchanged. Every label-free share estimate overcalls the second class (about 0.45 against the true 0.30). Built and frozen (68 tests), the stage was applied to the round-5 simulation runs' saved votes (benchmark/graph_stage.py; it reads nothing else from a run): seeds 1-5 RNA .700/.628/.593, ATAC .632/.585/.559. Held-out seeds 6-10, scored once after that: RNA .687/.634/.587 against the best baselines' .678 (Palantir)/.637 (kNN 15)/.573 (WOT), ATAC .621/.575/.549 against .615 (nearest centroid)/.615 (nearest centroid)/.548 (WOT). Five of the six targets were met; ATAC accuracy was 0.040 short (the share called the second class, about 0.48, is far above the true 0.30). Mean rank among 13 methods on the held-out seeds: RNA 2.0/4.2/2.9, ATAC 2.5/8.5/2.0 (best on AUROC and macro F1 in both). The real datasets' outputs are the round-5 votes, unchanged (every metric and interval identical)."
+  ],
+  "seeds": [0],
+  "pipeline": {
+    "validation": "shift",
+    "refine": true
+  },
+  "selection": {
+    "kfold": 5,
+    "valid_fraction": 0.1,
+    "stratified_kfold_test": true,
+    "stratified_kfold_valid": true,
+    "n_dataloader_workers": 0
+  },
+  "routing": {
+    "mass_ladder": [0.95, 0.8, 0.6, 0.4],
+    "floor": 20,
+    "relative_delta": 0.1,
+    "ladder_choice": "best",
+    "exp_sample_limit": 200
+  },
+  "synergy": {
+    "min_relative_gain": 0.01,
+    "max_steps": 50
+  },
+  "committee": {
+    "tolerance": 0.05,
+    "max_jsd": 0.01,
+    "min_majority": 0.5,
+    "rule": "logit",
+    "balance": "type",
+    "with_mixture": true,
+    "refit": "all"
+  },
+  "graph": {
+    "min_context_per_query": 1.0,
+    "neighbors": 30,
+    "diffusion_components": 10,
+    "n_components": 50,
+    "weight": 0.6
+  }
+}

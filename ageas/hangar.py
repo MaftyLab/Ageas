@@ -9,6 +9,7 @@ TODO:
     - Add methods to add/remove units from the hangar.
     - Add methods to hybridize models.
 """
+import copy
 import os
 import logging
 
@@ -66,9 +67,11 @@ class Hangar:
         :param unit_list: Whitelist of explicit unit IDs to keep. ``None``
             keeps all units.
         :returns: Mapping ``unit_id -> Unit`` for the units that survived the
-            filter.
+            filter. Units are deep copies, so separate sorties (e.g. different
+            seeds or extraction iterations) never share trained models or
+            reports.
         """
-        squad = self.units.copy()
+        squad = {k: copy.deepcopy(v) for k, v in self.units.items()}
         if unit_types is not None:
             squad = {k: v for k, v in squad.items() if v.type in unit_types}
         if unit_list is not None:

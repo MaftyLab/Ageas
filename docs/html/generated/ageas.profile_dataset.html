@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ageas.profile_dataset &mdash; Ageas  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9a9368b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ageas.design_panel" href="ageas.design_panel.html" />
+    <link rel="prev" title="ageas.MoE_Deck" href="ageas.MoE_Deck.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ageas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../v2.html">Feature-Routed Pipeline (v2)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#core-objects">Core Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#operations">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#feature-routed-pipeline-v2">Feature-Routed Pipeline (v2)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#data-profile-and-panel-design-v2">Data Profile and Panel Design (v2)</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ageas.profile_dataset</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ageas.profile_dataset"><code class="docutils literal notranslate"><span class="pre">profile_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.design_panel.html">ageas.design_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.extend_panel.html">ageas.extend_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.write_panel.html">ageas.write_panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.UnitSpec.html">ageas.UnitSpec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ageas.check_strategy.html">ageas.check_strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#validation-routing-and-integration-v2">Validation, Routing and Integration (v2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#graph-stage-v2">Graph Stage (v2)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ageas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">ageas.profile_dataset</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/ageas.profile_dataset.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ageas-profile-dataset">
+<h1>ageas.profile_dataset<a class="headerlink" href="#ageas-profile-dataset" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="ageas.profile_dataset">
+<span class="sig-prename descclassname"><span class="pre">ageas.</span></span><span class="sig-name descname"><span class="pre">profile_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">terminal_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminal_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_clusters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#ageas.profile_dataset" title="Link to this definition"></a></dt>
+<dd><p>Label-free profile of one dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>terminal_x</strong> – Terminal cells’ model input, <code class="docutils literal notranslate"><span class="pre">(n_cells,</span> <span class="pre">...,</span> <span class="pre">n_features)</span></code>.</p></li>
+<li><p><strong>terminal_labels</strong> – Integer class of every terminal cell.</p></li>
+<li><p><strong>query_x</strong> – Progenitor cells’ model input, same feature order. Their
+labels are never needed.</p></li>
+<li><p><strong>n_components</strong> – Principal components of the shared space.</p></li>
+<li><p><strong>n_neighbors</strong> – Neighbours that judge whether a cell sits among
+progenitors or terminal cells.</p></li>
+<li><p><strong>max_clusters</strong> – Most clusters tried when clustering all cells.</p></li>
+<li><p><strong>seed</strong> – Seed for the components and the clustering.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Mapping of measure name to value:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_terminal</span></code>, <code class="docutils literal notranslate"><span class="pre">n_query</span></code>, <code class="docutils literal notranslate"><span class="pre">n_features</span></code>, <code class="docutils literal notranslate"><span class="pre">n_classes</span></code> and
+<code class="docutils literal notranslate"><span class="pre">min_class_share</span></code> (the rarest terminal class’s share);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sparsity</span></code>: share of zero entries in the terminal cells’ input;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nonnegative</span></code>: whether no input value is negative;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">integer_share</span></code>: share of non-zero entries that are whole
+numbers (1 for raw counts);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nn_distance_ratio</span></code>: median distance from a progenitor to its
+nearest terminal cell, over the median distance between nearest
+terminal cells (about 1 when progenitors sit among mature cells);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coverage</span></code>: share of progenitors no farther from the nearest
+terminal cell than 95% of terminal cells are from theirs;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">domain_auc</span></code>: how well the share of progenitors among a cell’s
+neighbours tells progenitors from terminal cells (0.5: not at all);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_clusters</span></code>: clusters found among all cells;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query_own_clusters</span></code>: share of progenitors in clusters, among
+all cells, made at least 80% of progenitors;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">terminal_purity</span></code>: clustering the terminal cells alone, share of
+them in their cluster’s majority class (1: the mature classes
+cluster apart);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query_ambiguity</span></code>: mean entropy, scaled to 0–1, of a linear
+model of the mature classes on the progenitors (1: it cannot tell
+which class any progenitor resembles);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">terminal_linear_accuracy</span></code>: five-fold accuracy of that linear
+model on the terminal cells;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">terminal_nonlinear_gain</span></code>: how much a nearest-neighbour
+classifier, which can follow any boundary, adds to that accuracy
+(near 0 when a line separates the classes as well as anything).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ageas.MoE_Deck.html" class="btn btn-neutral float-left" title="ageas.MoE_Deck" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ageas.design_panel.html" class="btn btn-neutral float-right" title="ageas.design_panel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, MaftyLab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

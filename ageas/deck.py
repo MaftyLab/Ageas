@@ -26,7 +26,7 @@ class Deck(Hangar):
     of the candidate squad: a :class:`~ageas.tool.Trainer_Maker` to launch
     the correct trainer per model type, a per-unit report ledger, and the
     :meth:`debrief` aggregation that combines model-wise explanations
-    weighted by their validation/test metrics.
+    weighted by their (by default out-of-fold) performance.
 
     :ivar squad: Mapping ``unit_id -> Unit`` for the active operating units.
     :ivar trainer_maker: Factory that produces trainer-model pairs.
@@ -248,6 +248,7 @@ class Deck(Hangar):
         query_dataset: Dataset = None,
         batch_size: int = 10,
         num_workers: int = 1,
+        return_members: bool = False,
     ) -> tuple:
         """Ensemble-predict by averaging probabilities across the squad.
 
@@ -258,9 +259,15 @@ class Deck(Hangar):
             ``(x, y)`` tuples.
         :param batch_size: Batch size for the prediction dataloader.
         :param num_workers: Number of dataloader workers.
+        :param return_members: If ``True``, also return the per-unit
+            probabilities, e.g. for ensemble-disagreement estimates (see
+            :mod:`ageas.tool.uncertainty`).
         :returns: Tuple ``(all_preds, all_labels)`` where ``all_preds`` is the
             averaged probability matrix and ``all_labels`` is the concatenated
-            label tensor in the same order.
+            label tensor in the same order. With ``return_members=True`` the
+            tuple is ``(all_preds, all_labels, member_preds)`` where
+            ``member_preds`` maps ``unit_id`` to that unit's probability
+            matrix.
         """
         dataloader = DataLoader(
             query_dataset,
@@ -269,50 +276,95 @@ class Deck(Hangar):
             num_workers=num_workers,
         )
 
-        all_preds: list = []
-        all_labels: list = []
+        member_preds: dict = {}
+        all_labels = None
         for unit_id, unit in self.squad.items():
-            for i, (x, y) in enumerate(dataloader):
-                pred = unit.model.predict(x, y) / len(self.squad)
-                if len(all_preds) <= i:
-                    all_preds.append(pred)
-                    all_labels.append(y)
-                else:
-                    all_preds[i] += pred
+            preds, labels = [], []
+            for x, y in dataloader:
+                preds.append(np.asarray(unit.model.predict(x, y)))
+                labels.append(np.asarray(y))
+            member_preds[unit_id] = np.concatenate(preds, axis=0)
+            if all_labels is None:
+                all_labels = np.concatenate(labels, axis=0)
 
-        all_preds = np.concatenate(all_preds, axis=0)
-        all_labels = np.concatenate(all_labels, axis=0)
+        all_preds = np.mean(np.stack(list(member_preds.values())), axis=0)
+        if return_members:
+            return all_preds, all_labels, member_preds
         return all_preds, all_labels
+
+    def unit_weights(
+        self,
+        operation: str = 'trail',
+        mission: str = 'final',
+        monitor_type: str = 'max',
+        monitor_metric: str = 'oof.accuracy',
+        normalize: bool = True,
+    ) -> dict:
+        """Performance weights of the squad's units.
+
+        A unit's raw weight is its ``monitor_metric`` value for
+        higher-is-better metrics and the reciprocal for lower-is-better
+        ones. With ``normalize=True`` the weights sum to one, so weighted
+        sums become weighted means whose scale does not depend on how many
+        units survived.
+
+        :param operation: Operation name used to look up the metric in
+            ``unit.report``.
+        :param mission: Mission name inside the operation's report.
+        :param monitor_type: ``'max'`` or ``'min'``.
+        :param monitor_metric: Dotted metric name, e.g. ``'oof.accuracy'``
+            (out-of-fold, the default), ``'test.accuracy'`` or ``'vali.CEL'``.
+        :param normalize: If ``True``, rescale the weights to sum to one.
+        :returns: Mapping ``unit_id -> weight``.
+        """
+        met_type = monitor_metric.split('.')[0]
+        weights = {}
+        for unit_id, unit in self.squad.items():
+            value = float(unit.report[operation][mission][met_type][monitor_metric])
+            if monitor_type == 'min':
+                assert value != 0, "Weight for 'min' monitor type cannot be zero."
+                value = 1.0 / value
+            elif monitor_type != 'max':
+                raise ValueError("monitor_type must be 'max' or 'min'.")
+            weights[unit_id] = value
+
+        if normalize:
+            total = sum(weights.values())
+            assert total > 0, "Unit weights must sum to a positive value."
+            weights = {k: v / total for k, v in weights.items()}
+        return weights
 
     def debrief(
         self,
         exp_dataset: Dataset = None,
         operation: str = 'trail',
         mission: str = 'final',
-        monitor_type: str = 'min',
-        monitor_metric: str = 'vali.CEL',
+        monitor_type: str = 'max',
+        monitor_metric: str = 'oof.accuracy',
+        normalize_weights: bool = True,
         verbose: bool = True,
         **kwargs,
     ) -> pd.DataFrame:
         """Aggregate per-class explanation scores across the squad.
 
         Each unit's ``explain`` method is called on ``exp_dataset`` and the
-        resulting per-class score table is weighted by that unit's metric
-        value (``monitor_metric``). The weight direction depends on
-        ``monitor_type``: lower-is-better metrics divide by the score,
-        higher-is-better metrics multiply.
+        resulting per-class score tables are combined as a performance-
+        weighted sum, ``A_c = sum_m w_m d_{m,c}``, with weights from
+        :meth:`unit_weights`. By default the weights are the units'
+        out-of-fold scores normalised to sum to one, so ``A_c`` is a
+        weighted mean.
 
         :param exp_dataset: Dataset to explain. Forwarded unchanged to every
             unit's ``explain`` method.
         :param operation: Operation name used to look up the metric in
             ``unit.report``.
-        :param mission: Mission name (e.g. ``'final'`` or ``'fold_1'``) used
-            inside the operation's report.
-        :param monitor_type: ``'min'`` for lower-is-better metrics
-            (divide-by-weight), ``'max'`` for higher-is-better metrics
-            (multiply-by-weight).
-        :param monitor_metric: Dotted metric name (e.g. ``'vali.CEL'``,
-            ``'test.accuracy'``).
+        :param mission: Mission name (e.g. ``'final'``) used inside the
+            operation's report.
+        :param monitor_type: ``'max'`` for higher-is-better metrics (weight =
+            score), ``'min'`` for lower-is-better metrics (weight = 1/score).
+        :param monitor_metric: Dotted metric name (e.g. ``'oof.accuracy'``,
+            ``'test.accuracy'``, ``'vali.CEL'``).
+        :param normalize_weights: If ``True``, weights sum to one.
         :param verbose: If ``True``, print per-unit weights and the assembled
             answer.
         :param kwargs: Additional keyword arguments forwarded to each
@@ -320,14 +372,17 @@ class Deck(Hangar):
         :returns: The integrated per-class score table. Columns ending in
             ``_Std`` are dropped from the final answer.
         """
-        met_type = monitor_metric.split('.')[0]
+        weights = self.unit_weights(
+            operation=operation,
+            mission=mission,
+            monitor_type=monitor_type,
+            monitor_metric=monitor_metric,
+            normalize=normalize_weights,
+        )
         general_ans = None
 
         for unit_id, unit in self.squad.items():
-            weight = float(
-                unit.report[operation][mission][met_type][monitor_metric]
-            )
-
+            weight = weights[unit_id]
             if verbose:
                 _logger.info("Explaining Unit: %s, Weight: %s", unit_id, weight)
 
@@ -336,15 +391,7 @@ class Deck(Hangar):
                 device=unit.accelerator,
                 **kwargs,
             )
-
-            if monitor_type == 'min':
-                assert weight != 0, (
-                    "Weight for 'min' monitor type cannot be zero."
-                )
-                ans = report / weight
-            elif monitor_type == 'max':
-                ans = report * weight
-
+            ans = report * weight
             general_ans = ans if general_ans is None else general_ans + ans
 
             if verbose:

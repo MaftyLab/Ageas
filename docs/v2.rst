@@ -1,0 +1,218 @@
+.. _v2:
+
+Feature-routed pipeline (Ageas v2)
+==================================
+
+:func:`~ageas.run_pipeline` is Ageas's label-free workflow, introduced with
+version 0.1. The original workflow (:class:`~ageas.Hangar`,
+:func:`~ageas.n_kfold_selection`, :class:`~ageas.Deck`) trains a fixed
+panel of models on every feature and keeps the ones that pass a validation
+gate. The v2 pipeline differs in three ways:
+
+* it designs a panel for each dataset;
+* it narrows every model ("unit") to the features it relies on;
+* it integrates only units that help each other.
+
+No step uses progenitor labels; they serve only to score a finished run.
+
+The pipeline
+------------
+
+1. **Profile the dataset** (:func:`~ageas.profile_dataset`). From the
+   terminal cells, with their labels, and the progenitor cells' features
+   alone, it measures:
+
+   * size and input type: sparsity, non-negativity, whole-number counts;
+   * how far the progenitors sit from the mature cells:
+     nearest-neighbour distance ratio, coverage, neighbourhood AUC;
+   * how cells cluster: progenitors in clusters of their own, purity of
+     the mature classes' clusters;
+   * how ambiguous the progenitors look to a linear model of the mature
+     classes;
+   * how curved the mature classes' boundary is: linear accuracy, and what
+     a nearest-neighbour classifier adds.
+2. **Design the panel** (:func:`~ageas.design_panel`). Rules stated before
+   any run (below) turn the profile into new unit configurations. Every unit
+   (:class:`~ageas.UnitSpec`) records the rules that shaped it and the ones
+   that expect it to validate well or poorly. :func:`~ageas.write_panel`
+   writes the panel as a :class:`~ageas.Hangar` config folder.
+3. **Weight the terminal cells toward the progenitors**
+   (:func:`~ageas.shift_weights`). A terminal cell's weight is the odds that
+   its nearest neighbours, in the cells' shared principal-component space,
+   are progenitors. Weights are scaled to mean 1 and capped at 10, so
+   validation favours units that hold up on progenitor-like cells
+   (``validation='shift'``). ``validation='ordinary'`` counts every terminal
+   cell alike.
+4. **Route every unit to its features** (:func:`~ageas.moe_selection`, which
+   returns a :class:`~ageas.MoE_Deck`).
+
+   * In each fold, every unit trains on all features.
+   * Its own attributions (:func:`~ageas.explain_unit`) rank the features
+     (:func:`~ageas.key_features`).
+   * A pruning ladder of attribution mass narrows the unit as far as its
+     validation loss stays within ``relative_delta`` of the all-feature
+     version's, or to the version that validates best
+     (:func:`~ageas.search_ladder`).
+   * The chosen version predicts the fold's held-out cells. Together the
+     folds give every unit an out-of-fold record on all terminal cells.
+5. **Follow validation past the rules** (:func:`~ageas.extend_panel`,
+   ``refine=True``). Where a family's best-validated unit sits at the edge
+   of the range the rules gave it (C, smoothing, tree depth and rounds,
+   network size), a second round trains one more unit past that edge, in the
+   same folds.
+6. **Integrate**, two ways, on the out-of-fold record and under the same
+   validation:
+
+   * **The no-harm mixture** (:func:`~ageas.no_harm_selection`) adds units
+     by greedy forward selection only while they lower the ensemble's
+     log-loss, then drops any it no longer needs.
+   * **A committee** of competent units (:func:`~ageas.competent_units`:
+     out-of-fold balanced accuracy within ``tolerance`` of the best) is
+     thinned to distinct ones (:func:`~ageas.select_committee`). It votes
+     (:func:`~ageas.vote`) in log-odds, one voice per model type, and the
+     no-harm mixture counts as much as the whole committee.
+7. **Check the strategy** (:func:`~ageas.check_strategy`). For each rule:
+   do the units it favoured validate better than the ones it disfavoured?
+   And how well do the rules' preferences rank the units overall? Reported
+   under both validations.
+8. **Walk through unlabeled cells** (:func:`~ageas.graph_stage`). It runs
+   when the data hold at least as many unlabeled cells as progenitors (for
+   example, cells between them and the terminal states, as in a time
+   course) and there are two terminal classes. Otherwise, the vote is the
+   output.
+
+   * A random walk over a neighbour graph of every cell, stopped at the
+     first terminal cell, gives each progenitor its chance of reaching each
+     terminal state (:func:`~ageas.graph_fate`). The graph uses Palantir's
+     defaults: PCA (or LSI for TF-IDF input), 10 multiscale diffusion
+     components, 30 neighbours.
+   * :func:`~ageas.fuse` ranks the progenitors by 0.6 × the walk's rank plus
+     0.4 × the vote's. It calls the second class for the share the walk
+     gives it on average.
+
+Panel rules
+-----------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 45 33
+
+   * - Rule
+     - Fires when
+     - Effect
+   * - ``far_progenitors``
+     - neighbourhood AUC ≥ 0.9, coverage < 0.5, or half the progenitors in clusters of their own
+     - more regularisation, less capacity
+   * - ``near_progenitors``
+     - AUC < 0.75, coverage ≥ 0.8 and under a fifth in clusters of their own
+     - the reverse
+   * - ``few_cells`` / ``many_cells``
+     - under 1,000 / at least 5,000 terminal cells
+     - less / more capacity; network batch size and epochs follow the cell count
+   * - ``curved_boundary``
+     - a nearest-neighbour classifier adds ≥ 0.03 accuracy, or linear accuracy < 0.9
+     - more capacity; flexible variants favoured over linear models
+   * - ``straight_boundary``
+     - linear accuracy ≥ 0.97 and a flexible model adds < 0.01
+     - less capacity; linear models favoured
+   * - ``counts``
+     - non-negative whole numbers
+     - naive Bayes with smoothing 0.1, 1 and 10
+   * - ``wide``
+     - more than twice as many features as cells
+     - L1 logistic regression; trees sample 30% of the features
+   * - ``ambiguous_progenitors``
+     - the linear model's mean scaled entropy on progenitors ≥ 0.5
+     - more regularisation
+
+Every panel holds the following units:
+
+* logistic regressions (three C values);
+* a linear SVM (unless cells × features exceeds 10⁸);
+* naive Bayes for non-negative input;
+* three XGBoost variants: the capacity the rules chose, plus fewer,
+  shallower trees and more, deeper ones;
+* three MLPs and three ResNets (compact, standard and roomy);
+* a compact recurrent network.
+
+Running it
+----------
+
+:func:`~ageas.run_pipeline`'s own defaults are simple: for example, the
+committee averages probabilities, and the mixture stays out of the vote. The
+settings the method was benchmarked with are in the repository's
+``revision/v2/protocol.json``; pass its sections:
+
+.. code-block:: python
+
+    import json
+    import ageas
+
+    protocol = json.load(open("revision/v2/protocol.json"))
+    result = ageas.run_pipeline(
+        terminal_corpus,          # labelled terminal cells, e.g. a Multimodal_Corpus
+        progenitor_x,             # progenitors' model input, (n_cells, ..., n_features), no labels
+        workdir="ageas_v2_run",   # generated panel configs and Lightning logs
+        selection=protocol["selection"], routing=protocol["routing"],
+        synergy=protocol["synergy"], committee=protocol["committee"],
+        validation=protocol["pipeline"]["validation"], refine=protocol["pipeline"]["refine"],
+        accelerator="cuda", seed=0,
+        graph=all_cells, graph_settings=protocol["graph"],   # optional, see below
+    )
+
+``all_cells`` turns on the graph stage. It holds every cell under one
+preprocessing:
+
+* ``features``: terminal, query and unlabeled cells;
+* ``labels``: terminal class index, ``-1`` for the rest;
+* ``query_index``: each progenitor's row, in ``progenitor_x`` order;
+* ``kind``: ``"pca"``, or ``"lsi"`` for TF-IDF input.
+
+Without it, the committee's vote is the output.
+
+The :class:`~ageas.PipelineResult` holds:
+
+* ``query["final"]``: the progenitors' fate probabilities. This is the graph
+  stage's fusion, or the vote. ``query`` also holds the no-harm mixture
+  (``no_harm``), the vote (``vote``) with the committee's ``agreement`` and
+  ``disagreement`` per cell, every unit's probabilities (``members``) and the
+  walk (``walk``).
+* ``profile``, ``panel`` and ``report``: the data profile, the designed
+  units and the strategy check.
+* ``deck``: the :class:`~ageas.MoE_Deck`. It holds the routed experts, the
+  out-of-fold record (``deck.oof``), ``predict`` and ``debrief`` (per-class
+  feature importance).
+* ``cell_weights``, ``committee`` and ``graph``: the shift-aware weights, the
+  committee's members, and the graph stage's record (whether it ran, and
+  why).
+
+Protocol
+--------
+
+``revision/v2/protocol.json``:
+
+* ``selection``: 5 folds, 10% validation split, stratified;
+* ``routing``: ladder at 95%, 80%, 60% and 40% of attribution mass, at
+  least 20 features per class; the version that validates best is kept;
+* ``synergy``: each unit the mixture takes must lower its log-loss by at
+  least 1%;
+* ``committee``:
+
+  * competence within 0.05 balanced accuracy;
+  * near-duplicate members dropped (mean Jensen-Shannon divergence below
+    0.01 bits), as are members siding with the rest on under half the
+    cells;
+  * a log-odds vote with one voice per model type, the mixture joining it;
+  * every routed unit refitted on all terminal cells;
+* ``pipeline``: shift-aware validation, second round on;
+* ``graph``: at least one unlabeled cell per progenitor, 30 neighbours, 10
+  diffusion components, PCA 50, walk weight 0.6.
+
+Its ``_history`` records each change and the evidence behind it. The scripts
+that benchmarked the method, compared it with baseline methods, and ablated
+its components (reviewer comment R2.4) are in ``revision/v2``.
+
+.. note::
+
+   Keep ``workdir`` outside synced folders such as Dropbox: every fold writes
+   Lightning logs and refitted models there.

@@ -164,8 +164,10 @@ class Basic_Clf_Explainer:
         t_model = self.model.to(self.device)
         t_model.eval()
 
+        # Every position recorded below indexes class_data, not self.dataset.
+        class_data = self.dataset.stratify(class_index)
         dataloader = DataLoader(
-            self.dataset.stratify(class_index),
+            class_data,
             num_workers=self.n_dataloader_workers,
             batch_size=1,
             shuffle=False,
@@ -202,8 +204,8 @@ class Basic_Clf_Explainer:
         rec = pd.DataFrame(record)
 
         keep_samples = rec[rec['decision'] == class_index].index.tolist()
-        explain_data = Subset(self.dataset, keep_samples)
-        rec = rec[rec['decision'] == class_index].reset_index(drop=True)
+        explain_data = Subset(class_data, keep_samples)
+        rec = rec[rec['decision'] == class_index]
 
         if sample_limit is not None and len(keep_samples) > 0:
             sample_limit = min(sample_limit, len(explain_data))
@@ -218,7 +220,7 @@ class Basic_Clf_Explainer:
                 ]
                 .index.tolist()
             )
-            explain_data = Subset(self.dataset, indices)
+            explain_data = Subset(class_data, indices)
 
         return DataLoader(
             explain_data,

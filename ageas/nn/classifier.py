@@ -395,9 +395,12 @@ class NN_Classifier(pl.LightningModule):
                 sample_limit=exp_sample_limit,
             )
 
-            self.train()
-            exp_mean, exp_std = clf_explainer(i, dataloader=dataloader)
+            # Attribute in eval mode so dropout and batch statistics do not
+            # make the explanation stochastic. cuDNN only implements RNN
+            # backward in training mode, so it is disabled for this pass.
             self.eval()
+            with torch.backends.cudnn.flags(enabled=False):
+                exp_mean, exp_std = clf_explainer(i, dataloader=dataloader)
 
             if exp_mean is None or torch.all(torch.isnan(exp_mean)):
                 exp_mean = torch.zeros(len(dataset.features))

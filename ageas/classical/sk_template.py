@@ -10,7 +10,7 @@ import pandas as pd
 import pytorch_lightning as pl
 
 import ageas.tool.JSON as JSON
-from ageas.tool import l1_normalize
+from ageas.tool import class_contrast, l1_normalize, to_2d_numpy
 
 
 class Classifier_Template(pl.LightningModule):
@@ -38,7 +38,7 @@ class Classifier_Template(pl.LightningModule):
                 :class:`numpy.ndarray`.
             y: Label tensor.
         """
-        self.model.fit(np.array(x.squeeze()), np.array(y))
+        self.model.fit(to_2d_numpy(x), np.array(y))
 
     def predict(self, x, y=None) -> np.ndarray:
         """Return per-class probabilities from the underlying estimator.
@@ -50,14 +50,38 @@ class Classifier_Template(pl.LightningModule):
         Returns:
             Output of ``self.model.predict_proba``.
         """
-        return self.model.predict_proba(np.array(x.squeeze()))
+        return self.model.predict_proba(to_2d_numpy(x))
+
+    def class_coefficients(self) -> np.ndarray:
+        """Per-class coefficient vectors oriented toward each class.
+
+        scikit-learn stores a single coefficient row for binary problems,
+        oriented toward ``classes_[1]``; the row is assigned to
+        ``classes_[1]`` and its negation to ``classes_[0]``. Multi-class
+        estimators with one row per class (multinomial or one-vs-rest) are
+        mapped row-by-row onto ``classes_``.
+
+        Returns:
+            Array of shape ``(num_class, n_features)``.
+        """
+        coef = np.atleast_2d(np.asarray(self.model.coef_, dtype=float))
+        classes = [int(c) for c in self.model.classes_]
+        scores = np.zeros((self.hparams.model_params['num_class'], coef.shape[1]))
+        if coef.shape[0] == 1:
+            scores[classes[1]] = coef[0]
+            scores[classes[0]] = -coef[0]
+        else:
+            for row, c in zip(coef, classes):
+                scores[c] = row
+        return scores
 
     def explain(self, score_name: str = 'Scores', **kwargs) -> pd.DataFrame:
         """Default coefficient-based feature importance.
 
-        For binary classifiers the negative-class scores are appended to
-        match the multi-class layout used everywhere else; multi-class
-        coefficients are L1-normalised per class.
+        Each class's coefficient vector (see :meth:`class_coefficients`) is
+        L1-normalised and then passed through the same class-contrastive
+        specificity step (``d_c = s_c - max_{k != c} s_k``) used for the
+        neural-network and tree-based explanations.
 
         Note:
             This default implementation works on linear models with a
@@ -73,18 +97,15 @@ class Classifier_Template(pl.LightningModule):
             Per-feature, per-class score table as a
             :class:`~pandas.DataFrame`.
         """
-        if self.hparams.model_params['num_class'] == 2:
-            ans = l1_normalize(self.model.coef_.T, mode='numpy')
-            ans = np.concatenate((ans, -ans), axis=1)
-        else:
-            ans = self.model.coef_.T
-            for i, exp in enumerate(ans):
-                ans[i] = l1_normalize(exp, mode='numpy')
+        scores = np.array([
+            l1_normalize(row, mode='numpy') for row in self.class_coefficients()
+        ])
+        scores = class_contrast(scores)
 
         return pd.DataFrame(
-            ans,
+            scores.T,
             index=self.hparams.fea_names,
-            columns=[f'Class_{i}_Scores' for i in range(ans.shape[1])],
+            columns=[f'Class_{i}_Scores' for i in range(scores.shape[0])],
         )
 
     def save_model(self, path: str) -> None:

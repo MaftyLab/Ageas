@@ -13,7 +13,7 @@ import torch
 import xgboost as xgb
 from torch.utils.data import DataLoader
 
-from ageas.tool import l1_normalize
+from ageas.tool import l1_normalize, to_2d_numpy
 
 
 class XGB_Classifier(pl.LightningModule):
@@ -82,7 +82,7 @@ class XGB_Classifier(pl.LightningModule):
             y: Label tensor.
         """
         dtrain = xgb.DMatrix(
-            np.array(x.squeeze()),
+            to_2d_numpy(x),
             label=np.array(y),
             feature_names=self.hparams.fea_names,
         )
@@ -122,7 +122,7 @@ class XGB_Classifier(pl.LightningModule):
         self.model.set_param({'device': self.hparams.model_params['device']})
         return self.model.predict(
             xgb.DMatrix(
-                np.array(x.squeeze()),
+                to_2d_numpy(x),
                 label=np.array(y),
                 feature_names=self.hparams.fea_names,
             )

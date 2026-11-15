@@ -106,6 +106,43 @@ def l1_normalize(tensor, mode: str = 'torch'):
     raise ValueError(f"Unsupported mode '{mode}'. Choose 'torch' or 'numpy'.")
 
 
+def class_contrast(scores: np.ndarray) -> np.ndarray:
+    """Class-contrastive specificity score ``d_c = s_c - max_{k != c} s_k``.
+
+    Args:
+        scores: Per-class importance matrix of shape
+            ``(n_classes, n_features)``.
+
+    Returns:
+        Matrix of the same shape holding the discriminative specificity
+        scores. With a single class the input is returned unchanged.
+    """
+    scores = np.asarray(scores, dtype=float)
+    if scores.shape[0] < 2:
+        return scores.copy()
+    contrasted = np.empty_like(scores)
+    for ind in range(scores.shape[0]):
+        background = np.max(np.delete(scores, ind, axis=0), axis=0)
+        contrasted[ind] = scores[ind] - background
+    return contrasted
+
+
+def to_2d_numpy(x) -> np.ndarray:
+    """Flatten a ``(batch, ...)`` tensor/array into a ``(batch, features)`` array.
+
+    Unlike ``x.squeeze()``, this keeps the batch axis when the batch holds a
+    single sample.
+
+    Args:
+        x: :class:`torch.Tensor` or array-like with a leading batch axis.
+
+    Returns:
+        2D :class:`numpy.ndarray`.
+    """
+    x = x.detach().cpu().numpy() if isinstance(x, torch.Tensor) else np.asarray(x)
+    return x.reshape(x.shape[0], -1)
+
+
 def get_time_stamp() -> str:
     """Return the current local time as a ``YYYY-MM-DD HH:MM:SS`` string."""
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
@@ -186,6 +223,8 @@ __all__ = [
     'z_score_scaler',
     'min_max_scaler',
     'l1_normalize',
+    'class_contrast',
+    'to_2d_numpy',
     'get_time_stamp',
     'make_fake_adata',
     'KNN',
